@@ -1,0 +1,76 @@
+import React from "react";
+import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import Icon from 'react-native-vector-icons/Feather';
+
+interface ButtonProps {
+  title: string;
+  onPress: () => void;
+  iconName?: string;
+  variant?: 'default' | 'outline' | 'destructive';
+  disabled?: boolean;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+}
+
+export const Button: React.FC<ButtonProps> = ({ 
+  title, 
+  onPress, 
+  iconName, 
+  variant = 'default', 
+  disabled = false,
+  style,
+  textStyle
+}) => {
+  const isOutline = variant === 'outline';
+  const isDestructive = variant === 'destructive';
+
+  const backgroundColor = isDestructive ? '#ef4444' : isOutline ? 'transparent' : '#f97316';
+  const borderColor = isDestructive ? '#ef4444' : isOutline ? '#f97316' : '#f97316';
+  const textColor = isOutline ? '#f97316' : '#fff';
+  const iconColor = textColor;
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.button, 
+        { backgroundColor, borderColor },
+        isOutline && styles.buttonOutline,
+        isDestructive && styles.buttonDestructive,
+        disabled && styles.buttonDisabled,
+        style
+      ]}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      {iconName && <Icon name={iconName} size={16} color={iconColor} style={{ marginRight: 8 }} />}
+      <Text style={[styles.buttonText, { color: textColor }, textStyle]}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    minHeight: 48,
+  },
+  buttonOutline: {
+    backgroundColor: 'transparent',
+  },
+  buttonDestructive: {
+    backgroundColor: '#ef4444',
+    borderColor: '#ef4444',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
