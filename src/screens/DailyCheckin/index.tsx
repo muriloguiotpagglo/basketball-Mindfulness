@@ -12,6 +12,8 @@ import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from "./styles";
 
+/** daily */
+
 interface CheckInData {
   energy: number;
   mood: string;
