@@ -1,11 +1,10 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from "react-native";
-import Icon from 'react-native-vector-icons/Feather';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  iconName?: string;
+  iconName?: string; 
   variant?: 'default' | 'outline' | 'destructive';
   disabled?: boolean;
   style?: ViewStyle;
@@ -27,7 +26,6 @@ export const Button: React.FC<ButtonProps> = ({
   const backgroundColor = isDestructive ? '#ef4444' : isOutline ? 'transparent' : '#f97316';
   const borderColor = isDestructive ? '#ef4444' : isOutline ? '#f97316' : '#f97316';
   const textColor = isOutline ? '#f97316' : '#fff';
-  const iconColor = textColor;
 
   return (
     <TouchableOpacity
@@ -42,7 +40,6 @@ export const Button: React.FC<ButtonProps> = ({
       onPress={onPress}
       disabled={disabled}
     >
-      {iconName && <Icon name={iconName} size={16} color={iconColor} style={{ marginRight: 8 }} />}
       <Text style={[styles.buttonText, { color: textColor }, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
@@ -50,7 +47,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: 'row',
+    flexDirection: 'row', 
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,

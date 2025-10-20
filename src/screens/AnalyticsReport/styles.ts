@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     
-    // Métricas Rápidas
+    
     metricGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     metricCard: {
-        width: '48%', // Duas colunas em mobile
+        width: '48%', 
         marginBottom: 8,
     },
     metricContent: {
@@ -119,13 +119,12 @@ const styles = StyleSheet.create({
         marginRight: 4,
     },
 
-    // Tabs e Conteúdo
     tabsWrapper: {
         flex: 1,
     },
     tabsListStyle: {
         width: '100%',
-        maxWidth: Dimensions.get('window').width - 32, // Ocupa a largura total menos o padding
+        maxWidth: Dimensions.get('window').width - 32, 
     },
     sessionsGrid: {
         flexDirection: 'row',
@@ -137,7 +136,6 @@ const styles = StyleSheet.create({
         width: '48%',
     },
 
-    // Lista de Conclusão de Sessões
     completionListContainer: {
         gap: 12,
         paddingTop: 8,
@@ -177,7 +175,6 @@ const styles = StyleSheet.create({
         color: '#f97316',
     },
 
-    // Lista de Jogadores
     playerList: {
         gap: 16,
     },
@@ -227,7 +224,6 @@ const styles = StyleSheet.create({
         color: '#6b7280',
     },
 
-    // Mood Insights
     pieChartWrapper: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -243,42 +239,42 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     insightBoxGreen: {
-        backgroundColor: '#ecfdf5', // green-50
+        backgroundColor: '#ecfdf5', 
     },
     insightTitleGreen: {
         fontWeight: '500',
-        color: '#065f46', // green-800
+        color: '#065f46', 
         marginBottom: 4,
     },
     insightTextGreen: {
         fontSize: 12,
-        color: '#059669', // green-600
+        color: '#059669',
     },
 
     insightBoxYellow: {
-        backgroundColor: '#fffbe3', // yellow-50
+        backgroundColor: '#fffbe3', 
     },
     insightTitleYellow: {
         fontWeight: '500',
-        color: '#92400e', // yellow-800
+        color: '#92400e',
         marginBottom: 4,
     },
     insightTextYellow: {
         fontSize: 12,
-        color: '#b45309', // yellow-600
+        color: '#b45309',
     },
     
     insightBoxBlue: {
-        backgroundColor: '#eff6ff', // blue-50
+        backgroundColor: '#eff6ff',
     },
     insightTitleBlue: {
         fontWeight: '500',
-        color: '#1e40af', // blue-800
+        color: '#1e40af',
         marginBottom: 4,
     },
     insightTextBlue: {
         fontSize: 12,
-        color: '#2563eb', // blue-600
+        color: '#2563eb',
     },
 });
 

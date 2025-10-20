@@ -5,7 +5,6 @@ import { Label } from '../../components/ui/Label';
 import { Input } from '../../components/ui/Input';
 import { Switch } from '../../components/ui/Switch';
 import { Button } from '../../components/ui/Button';
-import Icon from 'react-native-vector-icons/Feather';
 
 export const SettingsPage: React.FC = () => {
   const [remindersEnabled, setRemindersEnabled] = useState(true);
