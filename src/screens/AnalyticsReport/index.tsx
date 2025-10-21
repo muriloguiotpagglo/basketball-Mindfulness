@@ -78,8 +78,8 @@ const chartConfig = {
     backgroundGradientFrom: "#ffffff",
     backgroundGradientTo: "#ffffff",
     decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(31, 41, 55, ${opacity})`, 
-    labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`, 
+    color: (opacity = 1) => `rgba(31, 41, 55, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
     propsForDots: {
         r: "4",
         strokeWidth: "2",
@@ -90,10 +90,10 @@ const LineChartTrends: React.FC = () => {
     const data = {
         labels: wellnessData.map(d => d.date),
         datasets: [
-            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, name: "Bem-estar" },   
+            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, name: "Bem-estar" },
             { data: wellnessData.map(d => d.energy), color: (opacity = 1) => `rgba(16, 185, 129, ${opacity})`, name: "Energia" }, // emerald-500
             { data: wellnessData.map(d => d.focus), color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`, name: "Foco" }, // blue-500
-            { data: wellnessData.map(d => d.stress), color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`, name: "Stress" }, 
+            { data: wellnessData.map(d => d.stress), color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`, name: "Stress" },
         ],
         legend: ["Bem-estar", "Energia", "Foco", "Stress"]
     };
@@ -101,7 +101,7 @@ const LineChartTrends: React.FC = () => {
     return (
         <LineChart
             data={data}
-            width={screenWidth - 32} 
+            width={screenWidth - 32}
             height={280}
             chartConfig={{
                 ...chartConfig,
@@ -127,11 +127,11 @@ const BarChartSessions: React.FC = () => {
     return (
         <BarChart
             data={data}
-            width={(screenWidth - 48) / 2} // Meia tela menos padding
+            width={screenWidth - 32} 
             height={200}
             chartConfig={{
                 ...chartConfig,
-                color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, // Barras Laranja
+                color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, 
             }}
             style={styles.chartStyle}
             fromZero={true}
@@ -145,12 +145,18 @@ const SessionCompletionList: React.FC = () => (
     <View style={styles.completionListContainer}>
         {sessionData.map((item, index) => (
             <View key={index} style={styles.completionItem}>
-                <Text style={styles.completionCategory}>{item.category}</Text>
+                <Text
+                    style={styles.completionCategory}
+                    numberOfLines={2} // Garante que o texto fique em uma única linha
+                    ellipsizeMode="tail" // Adiciona "..." no final se o texto for muito longo
+                >
+                    {item.category}
+                </Text>
                 <View style={styles.completionProgressWrapper}>
                     <View style={styles.progressBarBackground}>
-                        <View 
+                        <View
                             style={[
-                                styles.progressBarFill, 
+                                styles.progressBarFill,
                                 { width: `${item.completion}%` }
                             ]}
                         />
@@ -169,7 +175,7 @@ const PlayerPerformanceList: React.FC = () => (
             <View key={index} style={styles.playerItem}>
                 <View style={styles.playerInfo}>
                     <View style={styles.playerIconBg}>
-                        <Text style={{ color: "#f97316", fontSize: 20 }}>[👥]</Text> 
+                        <Text style={{ color: "#f97316", fontSize: 20 }}>[👥]</Text>
                     </View>
                     <View>
                         <Text style={styles.playerName}>{player.name}</Text>
@@ -177,14 +183,14 @@ const PlayerPerformanceList: React.FC = () => (
                     </View>
                 </View>
                 <View style={styles.playerStats}>
-                    <Badge 
-                        variant="default" 
-                        color={player.improvement >= 0 ? '#10b981' : '#ef4444'} 
+                    <Badge
+                        variant="default"
+                        color={player.improvement >= 0 ? '#10b981' : '#ef4444'}
                     >
                         {player.improvement >= 0 ? "+" : ""}{player.improvement}%
                     </Badge>
                     <View style={styles.playerStreak}>
-                        <Text style={{ color: "#6b7280", marginRight: 4 }}>[🎯]</Text> 
+                        <Text style={{ color: "#6b7280", marginRight: 4 }}>[🎯]</Text>
                         <Text style={styles.playerStreakText}>{player.streak} dias</Text>
                     </View>
                 </View>
@@ -198,7 +204,7 @@ const PieChartMood: React.FC = () => (
     <View style={styles.pieChartWrapper}>
         <PieChart
             data={moodDistribution}
-            width={(screenWidth - 32) / 2} 
+            width={(screenWidth - 32) / 2}
             height={200}
             chartConfig={chartConfig}
             accessor="value"
@@ -250,7 +256,7 @@ export default function AnalyticsReports() {
 
     return (
         <ScrollView style={styles.mainContainer} contentContainerStyle={styles.contentPadding}>
-            
+
             <View style={styles.header}>
                 <Text style={styles.mainTitle}>Relatórios e Análises</Text>
                 <Text style={styles.subtitle}>Insights detalhados sobre o bem-estar da equipe</Text>
@@ -259,11 +265,11 @@ export default function AnalyticsReports() {
             <View style={styles.controlsRow}>
                 <TouchableOpacity style={styles.selectTrigger}>
                     <Text style={styles.selectText}>Últimos 30 dias</Text>
-                    <Text style={{ fontSize: 16, color: "#6b7280", marginLeft: 4 }}>[⌄]</Text> 
+                    <Text style={{ fontSize: 16, color: "#6b7280", marginLeft: 4 }}>[⌄]</Text>
                 </TouchableOpacity>
-                <Button 
-                    title="Exportar" 
-                    onPress={() => console.log('Exportar')} 
+                <Button
+                    title="Exportar"
+                    onPress={() => console.log('Exportar')}
                     iconName="download"
                     variant="outline"
                     style={{ width: 'auto', flexGrow: 0 }}
@@ -279,7 +285,7 @@ export default function AnalyticsReports() {
                         </View>
                         <View style={styles.trendUp}>
                             {/* SUBSTITUÍDO: Icon name="trending-up" */}
-                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text> 
+                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text>
                             <Text style={styles.trendTextUp}>+5%</Text>
                         </View>
                     </View>
@@ -291,7 +297,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>89%</Text>
                         </View>
                         <View style={styles.trendUp}>
-                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text> 
+                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text>
                             <Text style={styles.trendTextUp}>+3%</Text>
                         </View>
                     </View>
@@ -303,7 +309,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>29%</Text>
                         </View>
                         <View style={styles.trendDown}>
-                            <Text style={{ fontSize: 16, color: "#ef4444", marginRight: 4 }}>[↘]</Text> 
+                            <Text style={{ fontSize: 16, color: "#ef4444", marginRight: 4 }}>[↘]</Text>
                             <Text style={styles.trendTextDown}>-8%</Text>
                         </View>
                     </View>
@@ -315,7 +321,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>143</Text>
                         </View>
                         <View style={styles.trendUp}>
-                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text> 
+                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text>
                             <Text style={styles.trendTextUp}>+12</Text>
                         </View>
                     </View>
@@ -324,12 +330,12 @@ export default function AnalyticsReports() {
 
             <Tabs defaultValue="trends" style={styles.tabsWrapper}>
                 <TabsList style={styles.tabsListStyle}>
-                    <TabsTrigger value="trends"><Text style={{fontSize: 12}}>[✨] Tendências</Text></TabsTrigger>
-                    <TabsTrigger value="sessions"><Text style={{fontSize: 12}}>[📊] Sessões</Text></TabsTrigger>
-                    <TabsTrigger value="players"><Text style={{fontSize: 12}}>[👥] Individual</Text></TabsTrigger>
-                    <TabsTrigger value="mood"><Text style={{fontSize: 12}}>[😊] Ânimo</Text></TabsTrigger>
+                    <TabsTrigger value="trends"><Text style={{ fontSize: 12 }}>[✨] Tendências</Text></TabsTrigger>
+                    <TabsTrigger value="sessions"><Text style={{ fontSize: 12 }}>[📊] Sessões</Text></TabsTrigger>
+                    <TabsTrigger value="players"><Text style={{ fontSize: 12 }}>[👥] Individual</Text></TabsTrigger>
+                    <TabsTrigger value="mood"><Text style={{ fontSize: 12 }}>[😊] Ânimo</Text></TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="trends">
                     <Card>
                         <CardHeader>
@@ -351,15 +357,15 @@ export default function AnalyticsReports() {
 
                 <TabsContent value="sessions">
                     <View style={styles.sessionsGrid}>
-                        <Card style={styles.halfCard}>
+                        <Card>
                             <CardHeader>
                                 <CardTitle>Sessões por Categoria</CardTitle>
                             </CardHeader>
-                            <CardContent style={{paddingHorizontal: 0}}>
+                            <CardContent style={{ paddingHorizontal: 0 }}>
                                 <BarChartSessions />
                             </CardContent>
                         </Card>
-                        <Card style={styles.halfCard}>
+                        <Card>
                             <CardHeader>
                                 <CardTitle>Taxa de Conclusão</CardTitle>
                             </CardHeader>
@@ -387,7 +393,7 @@ export default function AnalyticsReports() {
                             <CardHeader>
                                 <CardTitle>Distribuição de Humor</CardTitle>
                             </CardHeader>
-                            <CardContent style={{paddingHorizontal: 0}}>
+                            <CardContent style={{ paddingHorizontal: 0 }}>
                                 <PieChartMood />
                             </CardContent>
                         </Card>

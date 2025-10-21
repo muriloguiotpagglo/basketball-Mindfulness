@@ -13,11 +13,11 @@ import {
 import  AnalyticsReports  from '../AnalyticsReport';
 import  DailyCheckIn  from '../DailyCheckin';
 import { SettingsPage } from './SettingsPage';
+import MindfulnessScreen from '../Mindfulness'
 
 const { width } = Dimensions.get('window');
 
 const PlayerProfile = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Player Profile</Text></View>;
-const MindfulnessSessions = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Mindfulness Sessions</Text></View>;
 const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Sleep Hygiene</Text></View>;
 const Multidisciplinary = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Multidisciplinary</Text></View>;
 
@@ -172,7 +172,7 @@ export const MainScreen: React.FC = () => {
             case "players":
                 return <PlayerProfile />;
             case "mindfulness":
-                return <MindfulnessSessions />;
+                return <MindfulnessScreen />;
             case "sleep-hygiene":
                 return <SleepHygiene />;
             case "multidisciplinary":

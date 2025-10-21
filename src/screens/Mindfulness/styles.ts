@@ -7,52 +7,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
-  // Header da Aplicação (MindfulBasket)
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 10, // Ajuste conforme necessário para o status bar
-    paddingBottom: 10,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuIcon: {
-    width: 24,
-    height: 24,
-    tintColor: '#fff',
-    marginRight: 10,
-  },
-  logoImage: {
-    width: 30,
-    height: 30,
-    marginRight: 8,
-  },
-  appName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  appSubtitle: {
-    fontSize: 12,
-    color: '#ccc',
-  },
-  profileIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#f97316', // Cor de exemplo
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-
-  // Seção de Título (Sessões de Mindfulness)
+  // Seção de Título
   titleSection: {
     marginTop: 20,
     marginBottom: 20,
