@@ -1,303 +1,263 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
+const { width } = Dimensions.get('window');
+
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#121212', // Cor de fundo escura do mockup
-    paddingHorizontal: 16,
-  },
-
-  // Header da Aplicação (MindfulBasket)
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 10, // Ajuste conforme necessário para o status bar
-    paddingBottom: 10,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuIcon: {
-    width: 24,
-    height: 24,
-    tintColor: '#fff',
-    marginRight: 10,
-  },
-  logoImage: {
-    width: 30,
-    height: 30,
-    marginRight: 8,
-  },
-  appName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  appSubtitle: {
-    fontSize: 12,
-    color: '#ccc',
-  },
-  profileIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#f97316', // Cor de exemplo
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-
-  // Seção de Título (Sessões de Mindfulness)
-  titleSection: {
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  titleHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  titleIcon: {
-    width: 30,
-    height: 30,
-    tintColor: '#fff',
-    marginRight: 10,
-  },
-  titleText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    flex: 1, // Permite que o título ocupe o espaço restante
-  },
-  newSessionButton: {
-    backgroundColor: '#6d28d9', // Cor roxa de exemplo
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-  },
-  newSessionButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  subtitleText: {
-    fontSize: 16,
-    color: '#a0a0a0',
-    marginLeft: 40, // Alinha com o texto do título
-  },
-
-  // Contador de Dias Consecutivos
-  streakContainer: {
-    backgroundColor: '#282828',
-    borderRadius: 12,
-    padding: 20,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  streakIcon: {
-    width: 60,
-    height: 60,
-    tintColor: '#f97316', // Cor laranja do fogo
-    marginBottom: 10,
-  },
-  streakNumber: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  streakLabel: {
-    fontSize: 18,
-    color: '#a0a0a0',
-    marginBottom: 10,
-  },
-  streakStatusBadge: {
-    backgroundColor: '#f97316',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    marginBottom: 8,
-  },
-  streakStatusText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  streakSubtext: {
-    color: '#a0a0a0',
-    fontSize: 14,
-  },
-
-  // Botões de Ação
-  actionButtonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 30,
-    paddingHorizontal: 10,
-  },
-  completeButton: {
-    backgroundColor: '#10b981', // Cor verde de exemplo
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    flex: 1,
-    marginRight: 10,
-    alignItems: 'center',
-  },
-  completeButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  resetButtonText: {
-    color: '#a0a0a0',
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-  },
-
-  // Próximos Marcos
-  milestonesContainer: {
-    marginBottom: 30,
-  },
-  milestonesTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 15,
-  },
-  milestonesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-  milestoneBox: {
-    width: '30%', // Aproximadamente 3 por linha com espaçamento
-    aspectRatio: 1, // Quadrado
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#333',
-  },
-  milestoneAchieved: {
-    backgroundColor: '#166534', // Verde escuro
-    borderColor: '#22c55e', // Verde
-  },
-  milestonePending: {
-    backgroundColor: '#422006', // Laranja escuro
-    borderColor: '#f97316', // Laranja
-  },
-  milestoneDays: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  milestoneIcon: {
-    fontSize: 18,
-    color: '#fff',
-    marginTop: 5,
-  },
-
-  // Lista de Sessões
-  sessionListContainer: {
-    marginBottom: 30,
-  },
-  sessionCard: {
-    backgroundColor: '#282828',
-    borderRadius: 12,
-    marginBottom: 15,
-    overflow: 'hidden', // Para borderRadius funcionar com a imagem
-  },
-  sessionImage: {
-    width: '100%',
-    height: 180,
-  },
-  sessionTagsContainer: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 10,
-    left: 10,
-  },
-  sessionTag: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 15,
-    marginRight: 8,
-  },
-  levelTag: {
-    backgroundColor: '#10b981', // Verde
-  },
-  categoryTag: {
-    backgroundColor: '#f97316', // Laranja
-  },
-  sessionTagText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  playIconContainer: {
-    position: 'absolute',
-    top: 75, // Centraliza verticalmente na imagem
-    right: 15, // Alinha à direita
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  playIcon: {
-    color: '#fff',
-    fontSize: 24,
-    marginLeft: 5, // Ajuste para centralizar o triângulo
-  },
-  sessionDetailsContainer: {
-    padding: 15,
-  },
-  sessionTitleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  sessionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    flexShrink: 1, // Permite que o título encolha se necessário
-    marginRight: 10,
-  },
-  sessionDuration: {
-    fontSize: 14,
-    color: '#a0a0a0',
-  },
-  sessionDescription: {
-    fontSize: 14,
-    color: '#a0a0a0',
-    marginBottom: 10,
-  },
-  sessionFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  sessionParticipants: {
-    fontSize: 14,
-    color: '#a0a0a0',
-  },
-  detailsButtonText: {
-    color: '#f97316',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#121212',
+    },
+    contentPadding: {
+        paddingHorizontal: 16,
+        paddingBottom: 20,
+    },
+    header: {
+        marginBottom: 20,
+        marginTop: 10,
+    },
+    mainTitle: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#a0a0a0',
+    },
+    controlsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    selectTrigger: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#282828',
+        borderRadius: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+    },
+    selectText: {
+        color: '#fff',
+        fontSize: 14,
+    },
+    metricGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    metricCard: {
+        width: (width - 32 - 16) / 2, // screenWidth - padding - gap / 2
+        marginBottom: 16,
+        backgroundColor: '#282828',
+        borderRadius: 12,
+        padding: 15,
+    },
+    metricContent: {
+        // Adicione estilos específicos se houver
+    },
+    metricLabel: {
+        fontSize: 14,
+        color: '#a0a0a0',
+        marginBottom: 5,
+    },
+    metricValue: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    metricHint: {
+        fontSize: 12,
+        color: '#10b981',
+        marginTop: 5,
+    },
+    progressBar: {
+        height: 8,
+        backgroundColor: '#444',
+        borderRadius: 4,
+        marginTop: 8,
+    },
+    progressFill: {
+        height: '100%',
+        backgroundColor: '#f97316',
+        borderRadius: 4,
+    },
+    sessionsGrid: {
+        // flexDirection: 'row', // Removido conforme nossa discussão anterior
+        // justifyContent: 'space-between', // Removido conforme nossa discussão anterior
+        gap: 16, // Adicionado para espaçamento vertical
+        marginBottom: 20,
+    },
+    halfCard: {
+        // width: '48%', // Removido conforme nossa discussão anterior
+        flex: 1, // Para ocupar o espaço disponível em coluna
+    },
+    chartStyle: {
+        marginVertical: 8,
+        borderRadius: 16,
+    },
+    completionListContainer: {
+        // Estilos para o contêiner da lista de conclusão
+        paddingVertical: 10,
+    },
+    completionItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 10,
+    },
+    completionCategory: {
+        flex: 1,
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#fff',
+    },
+    completionProgressWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    progressBarBackground: {
+        width: 100, // Largura fixa para a barra de progresso
+        height: 8,
+        backgroundColor: '#444',
+        borderRadius: 4,
+        marginRight: 8,
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: '#f97316',
+        borderRadius: 4,
+    },
+    completionPercentage: {
+        fontSize: 14,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    playerList: {
+        marginBottom: 20,
+    },
+    playerItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#282828',
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 10,
+    },
+    playerInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    playerIconBg: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#333',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    playerName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    playerSessions: {
+        fontSize: 12,
+        color: '#a0a0a0',
+    },
+    playerStats: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    playerStreak: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 15,
+    },
+    playerStreakText: {
+        fontSize: 14,
+        color: '#a0a0a0',
+    },
+    pieChartWrapper: {
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    moodInsightsContainer: {
+        marginBottom: 20,
+    },
+    moodInsightBox: {
+        padding: 15,
+        borderRadius: 12,
+        marginBottom: 10,
+    },
+    insightBoxGreen: {
+        backgroundColor: '#166534',
+    },
+    insightBoxYellow: {
+        backgroundColor: '#422006',
+    },
+    insightBoxBlue: {
+        backgroundColor: '#1e3a8a',
+    },
+    insightTitleGreen: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#22c55e',
+        marginBottom: 5,
+    },
+    insightTextGreen: {
+        fontSize: 14,
+        color: '#a0a0a0',
+    },
+    insightTitleYellow: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#f97316',
+        marginBottom: 5,
+    },
+    insightTextYellow: {
+        fontSize: 14,
+        color: '#a0a0a0',
+    },
+    insightTitleBlue: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#60a5fa',
+        marginBottom: 5,
+    },
+    insightTextBlue: {
+        fontSize: 14,
+        color: '#a0a0a0',
+    },
+    // Estilos para Tabs (se houver)
+    tabsContainer: {
+        marginBottom: 20,
+    },
+    tabsList: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#282828',
+        borderRadius: 8,
+        padding: 5,
+        marginBottom: 10,
+    },
+    tabsTrigger: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 6,
+    },
+    tabsTriggerActive: {
+        backgroundColor: '#f97316',
+    },
+    tabsTriggerText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    tabsTriggerTextInactive: {
+        color: '#a0a0a0',
+    },
 });
-
-export default styles;

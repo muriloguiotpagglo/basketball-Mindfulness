@@ -147,8 +147,8 @@ const SessionCompletionList: React.FC = () => (
             <View key={index} style={styles.completionItem}>
                 <Text
                     style={styles.completionCategory}
-                    numberOfLines={2} // Garante que o texto fique em uma única linha
-                    ellipsizeMode="tail" // Adiciona "..." no final se o texto for muito longo
+                    numberOfLines={2} 
+                    ellipsizeMode="tail" 
                 >
                     {item.category}
                 </Text>

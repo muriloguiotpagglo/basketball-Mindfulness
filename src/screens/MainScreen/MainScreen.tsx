@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    StyleSheet, 
-    ScrollView, 
-    Image, 
-    Dimensions, 
-    TouchableOpacity, 
-    Modal, 
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    Modal,
 } from 'react-native';
 
-import  AnalyticsReports  from '../AnalyticsReport';
-import  DailyCheckIn  from '../DailyCheckin';
+import AnalyticsReports from '../AnalyticsReport';
+import DailyCheckIn from '../DailyCheckin';
 import { SettingsPage } from './SettingsPage';
 import MindfulnessScreen from '../Mindfulness'
 
@@ -22,23 +22,23 @@ const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style
 const Multidisciplinary = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Multidisciplinary</Text></View>;
 
 const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "⊞" }, 
-    { id: "players", label: "Atletas", icon: "👤" }, 
-    { id: "mindfulness", label: "Mindfulness", icon: "☯" }, 
-    { id: "sleep-hygiene", label: "Higienização do Sono", icon: "🌙" }, 
-    { id: "multidisciplinary", label: "Multiprofissional", icon: "⚕️" }, 
-    { id: "checkin", label: "Check-in", icon: "📝" }, 
-    { id: "analytics", label: "Relatórios", icon: "📊" }, 
-    { id: "settings", label: "Configurações", icon: "⚙️" }, 
+    { id: "dashboard", label: "Dashboard", icon: "⊞" },
+    { id: "players", label: "Atletas", icon: "👤" },
+    { id: "mindfulness", label: "Mindfulness", icon: "☯" },
+    { id: "sleep-hygiene", label: "Higienização do Sono", icon: "🌙" },
+    { id: "multidisciplinary", label: "Multiprofissional", icon: "⚕️" },
+    { id: "checkin", label: "Check-in", icon: "📝" },
+    { id: "analytics", label: "Relatórios", icon: "📊" },
+    { id: "settings", label: "Configurações", icon: "⚙️" },
 ];
 
 const Navigation = ({ onToggleMenu, avatarText }: any) => (
     <View style={styles.headerContainer}>
         <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft}>
             <Text style={styles.navigationText}>☰</Text>
-            <Image 
-                source={{ uri: 'https://placehold.co/24x24/f97316/ffffff?text=🏀' }} 
-                style={styles.headerLogo} 
+            <Image
+                source={{ uri: 'https://placehold.co/24x24/f97316/ffffff?text=🏀' }}
+                style={styles.headerLogo}
             />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
@@ -58,14 +58,18 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText }: { activeTab: 
         visible={true}
         onRequestClose={onClose}
     >
-        <View style={styles.modalOverlayRight}>
+        <View style={styles.modalOverlay}>
+            
+            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
             
             <View style={styles.sideMenuContainer}>
                 
                 <View style={styles.sideMenuHeader}>
+                    
                     <TouchableOpacity onPress={onClose} style={styles.sideMenuHeaderClose}>
                         <Text style={styles.sideMenuCloseIcon}>✕</Text>
                     </TouchableOpacity>
+                    
                     <Image 
                         source={{ uri: 'https://placehold.co/24x24/f97316/ffffff?text=🏀' }} 
                         style={styles.sideMenuLogo} 
@@ -97,64 +101,61 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText }: { activeTab: 
                     ))}
                 </ScrollView>
             </View>
-            
-            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
         </View>
     </Modal>
 );
 
 const TeamDashboard = () => (
     <ScrollView contentContainerStyle={styles.dashboardScrollContent} style={styles.dashboardContainer}>
-      
-      <View style={styles.mainCard}>
-        <View>
-          <Text style={styles.mainCardTitle}>Dashboard da Equipe</Text>
-          <Text style={styles.mainCardSubtitle}>Monitoramento de bem-estar e mindfulness</Text>
+
+        <View style={styles.mainCard}>
+            <View>
+                <Text style={styles.mainCardTitle}>Dashboard da Equipe</Text>
+                <Text style={styles.mainCardSubtitle}>Monitoramento de bem-estar e mindfulness</Text>
+            </View>
+            <Image
+                source={{ uri: 'https://placehold.co/60x60/ffffff/000?text=BRASILIA' }}
+                style={styles.teamLogo}
+            />
         </View>
-        <Image 
-          source={{ uri: 'https://placehold.co/60x60/ffffff/000?text=BRASILIA' }} 
-          style={styles.teamLogo} 
-        />
-      </View>
-  
-      <View style={styles.metricCard}>
-        <Text style={styles.metricLabel}>Total de Atletas</Text>
-        <Text style={styles.metricValue}>12</Text>
-        <Text style={styles.metricHint}>+2 desde o mês passado</Text>
-      </View>
-      <View style={styles.metricCard}>
-        <Text style={styles.metricLabel}>Bem-estar Médio</Text>
-        <Text style={styles.metricValue}>78%</Text>
-        <View style={styles.progressBar}><View style={[styles.progressFill, { width: '78%' }]} /></View>
-      </View>
-      <View style={styles.metricCard}>
-        <Text style={styles.metricLabel}>Sessões Hoje</Text>
-        <Text style={styles.metricValue}>8</Text>
-        <Text style={styles.metricHint}>67% dos atletas ativos</Text>
-      </View>
-      <View style={styles.metricCard}>
-        <Text style={styles.metricLabel}>Nível de Stress</Text>
-        <Text style={styles.metricValue}>35%</Text>
-        <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#f97316' }]} /></View>
-      </View>
-  
-      <View style={styles.activitiesCard}>
-        <Text style={styles.activitiesTitle}>Atividades Recentes</Text>
-        <View style={styles.activityItem}>
-          <Text style={styles.activityName}>João Silva</Text>
-          <Text style={styles.activityStatus}>Concluído</Text>
+
+        <View style={styles.metricCard}>
+            <Text style={styles.metricLabel}>Total de Atletas</Text>
+            <Text style={styles.metricValue}>12</Text>
+            <Text style={styles.metricHint}>+2 desde o mês passado</Text>
         </View>
-        <View style={styles.activityItem}>
-          <Text style={styles.activityName}>Maria Santos</Text>
-          <Text style={styles.activityStatus}>Bom</Text>
+        <View style={styles.metricCard}>
+            <Text style={styles.metricLabel}>Bem-estar Médio</Text>
+            <Text style={styles.metricValue}>78%</Text>
+            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '78%' }]} /></View>
         </View>
-      </View>
-  
-      <View style={{ height: 50 }} />
+        <View style={styles.metricCard}>
+            <Text style={styles.metricLabel}>Sessões Hoje</Text>
+            <Text style={styles.metricValue}>8</Text>
+            <Text style={styles.metricHint}>67% dos atletas ativos</Text>
+        </View>
+        <View style={styles.metricCard}>
+            <Text style={styles.metricLabel}>Nível de Stress</Text>
+            <Text style={styles.metricValue}>35%</Text>
+            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#f97316' }]} /></View>
+        </View>
+
+        <View style={styles.activitiesCard}>
+            <Text style={styles.activitiesTitle}>Atividades Recentes</Text>
+            <View style={styles.activityItem}>
+                <Text style={styles.activityName}>João Silva</Text>
+                <Text style={styles.activityStatus}>Concluído</Text>
+            </View>
+            <View style={styles.activityItem}>
+                <Text style={styles.activityName}>Maria Santos</Text>
+                <Text style={styles.activityStatus}>Bom</Text>
+            </View>
+        </View>
+
+        <View style={{ height: 50 }} />
     </ScrollView>
 );
 
-// --- COMPONENTE PRINCIPAL ---
 
 export const MainScreen: React.FC = () => {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -168,7 +169,7 @@ export const MainScreen: React.FC = () => {
     const renderContent = () => {
         switch (activeTab) {
             case "dashboard":
-                return <TeamDashboard />; 
+                return <TeamDashboard />;
             case "players":
                 return <PlayerProfile />;
             case "mindfulness":
@@ -196,35 +197,33 @@ export const MainScreen: React.FC = () => {
             </View>
 
             {isMenuOpen && (
-                <SideMenu 
-                    activeTab={activeTab} 
-                    onTabChange={setActiveTab} 
-                    onClose={() => setIsMenuOpen(false)} 
-                    avatarText="TS" 
+                <SideMenu
+                    activeTab={activeTab}
+                    onTabChange={setActiveTab}
+                    onClose={() => setIsMenuOpen(false)}
+                    avatarText="TS"
                 />
             )}
         </View>
     );
 };
 
-// --- ESTILOS ---
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8', 
+        backgroundColor: '#f8f8f8',
     },
     mainContent: {
         flex: 1,
     },
-    // Estilos do Header/Navigation (Mantidos Iguais)
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        paddingTop: 40, 
+        paddingTop: 40,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#e5e7eb',
@@ -277,17 +276,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         flexDirection: 'row',
     },
-    modalOverlayRight: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        flexDirection: 'row-reverse', 
-    },
     modalTouchOutside: {
-        flex: 1, 
+        flex: 1,
     },
     sideMenuContainer: {
-        width: width * 0.8, 
-        backgroundColor: '#fff', 
+        width: width * 0.8,
+        backgroundColor: '#fff',
         height: '100%',
     },
     sideMenuScroll: {
@@ -297,10 +291,10 @@ const styles = StyleSheet.create({
     sideMenuHeader: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start', 
+        justifyContent: 'flex-start',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        paddingTop: 40, 
+        paddingTop: 40,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#e5e7eb',
@@ -309,7 +303,7 @@ const styles = StyleSheet.create({
     sideMenuHeaderClose: {
         position: 'absolute',
         top: 40,
-        left: 8, 
+        left: 8,
         zIndex: 10,
     },
     sideMenuCloseIcon: {
@@ -320,7 +314,7 @@ const styles = StyleSheet.create({
     sideMenuLogo: {
         width: 24,
         height: 24,
-        marginLeft: 40, 
+        marginLeft: 40,
     },
     sideMenuAppTitle: {
         fontSize: 16,
@@ -345,28 +339,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 14,
         paddingHorizontal: 20,
-        borderLeftWidth: 0, 
+        borderLeftWidth: 0,
         backgroundColor: 'transparent',
     },
     menuItemActive: {
-        backgroundColor: '#f3f4f6', 
-        borderRadius: 8, 
+        backgroundColor: '#f3f4f6',
+        borderRadius: 8,
         marginHorizontal: 8,
     },
     menuIconLight: {
         fontSize: 20,
-        color: '#6b7280', 
-        width: 30, 
+        color: '#6b7280',
+        width: 30,
         textAlign: 'center',
     },
     menuLabelLight: {
         fontSize: 16,
-        color: '#1f2937', 
+        color: '#1f2937',
         marginLeft: 10,
         fontWeight: '400',
     },
     menuLabelActiveLight: {
-        color: '#1f2937', 
+        color: '#1f2937',
         fontWeight: '600',
     },
 
@@ -380,7 +374,7 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
     },
     mainCard: {
-        backgroundColor: '#f97316', 
+        backgroundColor: '#f97316',
         padding: 20,
         borderRadius: 12,
         marginBottom: 16,
@@ -426,7 +420,7 @@ const styles = StyleSheet.create({
     },
     metricHint: {
         fontSize: 12,
-        color: '#10b981', 
+        color: '#10b981',
     },
     progressBar: {
         height: 6,

@@ -20,7 +20,7 @@ interface Milestone {
   achieved: boolean;
 }
 
-]const mindfulnessSessions: MindfulnessSession[] = [
+const mindfulnessSessions: MindfulnessSession[] = [
   {
     id: '1',
     level: 'Iniciante',
@@ -53,11 +53,9 @@ const milestones: Milestone[] = [
 
 const currentStreak = 5;
 
-// Componente principal
 const MindfulnessScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container}>
-      {/* Header da Aplicação */}
       <View style={styles.headerContainer}>
         <View style={styles.headerLeft}>
           <TouchableOpacity>
