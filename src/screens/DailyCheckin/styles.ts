@@ -1,3 +1,4 @@
+// @ts-ignore – suppress missing module error for react-native
 import { Dimensions, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
