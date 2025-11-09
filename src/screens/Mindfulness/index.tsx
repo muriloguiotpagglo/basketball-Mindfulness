@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import styles from './styles';
+import { Alert } from 'react-native';
+import { listPractices, createMyPractice, MindfulnessPractice } from '../../services/mindfulness';
+import { getToken } from '../../services/auth';
 
 
 interface MindfulnessSession {
@@ -54,6 +57,49 @@ const milestones: Milestone[] = [
 const currentStreak = 5;
 
 const MindfulnessScreen: React.FC = () => {
+  const [practices, setPractices] = useState<MindfulnessPractice[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    listPractices()
+      .then(setPractices)
+      .catch(() => setError('Falha ao carregar práticas'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const nivelLabel = (nivel: string) => {
+    if (nivel === 'iniciante') return 'Iniciante';
+    if (nivel === 'intermediario') return 'Intermediário';
+    return 'Avançado';
+  };
+
+  const handleCompleteSession = async () => {
+    const token = await getToken();
+    if (!token) {
+      Alert.alert('Autenticação necessária', 'Faça login na aba Configurações.');
+      return;
+    }
+    if (practices.length === 0) {
+      Alert.alert('Nenhuma prática disponível');
+      return;
+    }
+    const p = practices[0];
+    try {
+      await createMyPractice({
+        mindfulnessId: p.id,
+        dataRealizada: new Date().toISOString(),
+        duracaoReal: p.duracao,
+        feedback: 'Sessão concluída no app',
+        pontuacao: p.duracao,
+      });
+      Alert.alert('Sucesso', 'Sessão registrada!');
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível registrar a sessão');
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -145,9 +191,58 @@ const MindfulnessScreen: React.FC = () => {
           </View>
         ))}
       </View>
+      {loading && <Text style={{ color: '#fff' }}>Carregando práticas...</Text>}
+      {error && <Text style={{ color: '#ef4444' }}>{error}</Text>}
 
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity style={styles.completeButton} onPress={handleCompleteSession}>
+          <Text style={styles.completeButtonText}>⚡ Completei Sessão!</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.resetButtonText}>Reset</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.sessionListContainer}>
+        {practices.map((session) => (
+          <View key={session.id} style={styles.sessionCard}>
+            <Image
+              source={{ uri: session.imageUrl || 'https://placehold.co/600x400/282828/ffffff?text=Mindfulness' }}
+              style={styles.sessionImage}
+            />
+            <View style={styles.sessionTagsContainer}>
+              <View style={[styles.sessionTag, styles.levelTag]}>
+                <Text style={styles.sessionTagText}>{nivelLabel(session.nivel)}</Text>
+              </View>
+              <View style={[styles.sessionTag, styles.categoryTag]}>
+                <Text style={styles.sessionTagText}>{session.category || 'Geral'}</Text>
+              </View>
+            </View>
+            <View style={styles.playIconContainer}>
+              <Text style={styles.playIcon}>▶</Text>
+            </View>
+            <View style={styles.sessionDetailsContainer}>
+              <View style={styles.sessionTitleRow}>
+                <Text style={styles.sessionTitle}>{session.titulo}</Text>
+                <Text style={styles.sessionDuration}>⚡ {session.duracao}min</Text>
+              </View>
+              <Text style={styles.sessionDescription}>
+                {session.descricao || 'Sem descrição'}
+              </Text>
+              <View style={styles.sessionFooter}>
+                <Text style={styles.sessionParticipants}>
+                  👥 {session.participants ?? 0} participantes
+                </Text>
+                <TouchableOpacity>
+                  <Text style={styles.detailsButtonText}>Ver Detalhes</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
-};
+}
 
 export default MindfulnessScreen;
