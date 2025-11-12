@@ -14,6 +14,7 @@ import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
 import { SettingsPage } from './SettingsPage';
 import MindfulnessScreen from '../Mindfulness'
+import { logout } from '../../services/auth'
 
 const { width } = Dimensions.get('window');
 
@@ -51,7 +52,7 @@ const Navigation = ({ onToggleMenu, avatarText }: any) => (
     </View>
 );
 
-const SideMenu = ({ activeTab, onTabChange, onClose, avatarText }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, avatarText: string }) => (
+const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, avatarText: string, onLogout: () => void }) => (
     <Modal
         animationType="fade"
         transparent={true}
@@ -100,6 +101,15 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText }: { activeTab: 
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
+                <View style={styles.sideMenuFooter}>
+                    <TouchableOpacity
+                        style={styles.logoutButton}
+                        onPress={onLogout}
+                    >
+                        <Text style={styles.menuIconLight}>🚪</Text>
+                        <Text style={styles.logoutLabel}>Sair</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     </Modal>
@@ -157,13 +167,21 @@ const TeamDashboard = () => (
 );
 
 
-export const MainScreen: React.FC = () => {
+export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState("dashboard");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleToggleMenu = () => {
         setIsMenuOpen(true);
         console.log("Comportamento de abrir menu lateral acionado. Estado isMenuOpen: true");
+    };
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } finally {
+            setIsMenuOpen(false);
+            if (onLogout) onLogout();
+        }
     };
 
     const renderContent = () => {
@@ -202,6 +220,7 @@ export const MainScreen: React.FC = () => {
                     onTabChange={setActiveTab}
                     onClose={() => setIsMenuOpen(false)}
                     avatarText="TS"
+                    onLogout={handleLogout}
                 />
             )}
         </View>
@@ -361,6 +380,24 @@ const styles = StyleSheet.create({
     },
     menuLabelActiveLight: {
         color: '#1f2937',
+        fontWeight: '600',
+    },
+    sideMenuFooter: {
+        borderTopWidth: 1,
+        borderTopColor: '#e5e7eb',
+        paddingVertical: 12,
+        backgroundColor: '#fff',
+    },
+    logoutButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 14,
+        paddingHorizontal: 20,
+    },
+    logoutLabel: {
+        fontSize: 16,
+        color: '#ef4444',
+        marginLeft: 10,
         fontWeight: '600',
     },
 
