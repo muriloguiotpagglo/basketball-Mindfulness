@@ -3,10 +3,11 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const BASE_URL =
-  Platform.OS === 'android' ? 'http://10.0.2.2:3002' : 'http://localhost:3002';
+  Platform.OS === 'android' ? 'http://10.0.2.2:3001' : 'http://localhost:3001';
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  timeout: 8000,
 });
 
 api.interceptors.request.use(async (config) => {
