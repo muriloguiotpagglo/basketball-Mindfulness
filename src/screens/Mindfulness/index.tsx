@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Icon } from '../../components/ui/Icon';
+import { AppLogo } from '../../components/ui/AppLogo';
 import styles from './styles';
 import { Alert } from 'react-native';
 import { listPractices, createMyPractice, MindfulnessPractice } from '../../services/mindfulness';
@@ -105,9 +107,9 @@ const MindfulnessScreen: React.FC = () => {
       <View style={styles.headerContainer}>
         <View style={styles.headerLeft}>
           <TouchableOpacity>
-            <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/ffffff/menu--v1.png' }} style={styles.menuIcon} />
+            <Icon name="menu" size={24} color="#ffffff" style={styles.menuIcon} />
           </TouchableOpacity>
-          <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/f97316/basketball.png' }} style={styles.logoImage} />
+          <AppLogo size={24} />
           <View>
             <Text style={styles.appName}>MindfulBasket</Text>
             <Text style={styles.appSubtitle}>Sistema de Monitoramento</Text>
@@ -120,7 +122,7 @@ const MindfulnessScreen: React.FC = () => {
       {/* Seção de Título */}
       <View style={styles.titleSection}>
         <View style={styles.titleHeader}>
-            <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/ffffff/meditation-guru.png' }} style={styles.titleIcon} />
+            <Icon name="mindfulness" size={24} color="#ffffff" style={styles.titleIcon} />
             <Text style={styles.titleText}>Sessões de Mindfulness</Text>
             <TouchableOpacity style={styles.newSessionButton}>
                 <Text style={styles.newSessionButtonText}>Nova Sessão</Text>
@@ -131,7 +133,7 @@ const MindfulnessScreen: React.FC = () => {
 
       {/* Contador de Dias Consecutivos */}
       <View style={styles.streakContainer}>
-        <Image source={{ uri: 'https://img.icons8.com/ios/50/f9a82c/fire-element.png' }} style={styles.streakIcon} />
+        <Icon name="fire" size={24} color="#f9a82c" style={styles.streakIcon} />
         <Text style={styles.streakNumber}>{currentStreak}</Text>
         <Text style={styles.streakLabel}>dias consecutivos</Text>
         <View style={styles.streakStatusBadge}>
@@ -143,7 +145,10 @@ const MindfulnessScreen: React.FC = () => {
       {/* Botões de Ação */}
       <View style={styles.actionButtonsContainer}>
         <TouchableOpacity style={styles.completeButton}>
-            <Text style={styles.completeButtonText}>⚡ Completei Sessão!</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name="zap" size={18} color="#ffffff" style={{ marginRight: 8 }} />
+              <Text style={styles.completeButtonText}>Completei Sessão!</Text>
+            </View>
         </TouchableOpacity>
         <TouchableOpacity>
             <Text style={styles.resetButtonText}>Reset</Text>
@@ -152,12 +157,15 @@ const MindfulnessScreen: React.FC = () => {
 
       {/* Próximos Marcos */}
       <View style={styles.milestonesContainer}>
-        <Text style={styles.milestonesTitle}>🏆 Próximos Marcos</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Icon name="trophy" size={20} color="#f59e0b" style={{ marginRight: 8 }} />
+          <Text style={styles.milestonesTitle}>Próximos Marcos</Text>
+        </View>
         <View style={styles.milestonesGrid}>
           {milestones.map(milestone => (
             <View key={milestone.id} style={[styles.milestoneBox, milestone.achieved ? styles.milestoneAchieved : styles.milestonePending]}>
               <Text style={styles.milestoneDays}>{milestone.days}</Text>
-              <Text style={styles.milestoneIcon}>{milestone.achieved ? '⭐' : '🎯'}</Text>
+              <Icon name={milestone.achieved ? 'star' : 'target'} size={18} color={milestone.achieved ? '#f59e0b' : '#374151'} />
             </View>
           ))}
         </View>
@@ -173,16 +181,22 @@ const MindfulnessScreen: React.FC = () => {
                 <View style={[styles.sessionTag, styles.categoryTag]}><Text style={styles.sessionTagText}>{session.category}</Text></View>
             </View>
             <View style={styles.playIconContainer}>
-                <Text style={styles.playIcon}>▶</Text>
+                <Icon name="play" size={20} color="#ffffff" />
             </View>
             <View style={styles.sessionDetailsContainer}>
                 <View style={styles.sessionTitleRow}>
                     <Text style={styles.sessionTitle}>{session.title}</Text>
-                    <Text style={styles.sessionDuration}>⚡ {session.duration}min</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Icon name="zap" size={14} color="#f59e0b" style={{ marginRight: 4 }} />
+                      <Text style={styles.sessionDuration}>{session.duration}min</Text>
+                    </View>
                 </View>
                 <Text style={styles.sessionDescription}>{session.description}</Text>
                 <View style={styles.sessionFooter}>
-                    <Text style={styles.sessionParticipants}>👥 {session.participants} participantes</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Icon name="users" size={14} color="#374151" style={{ marginRight: 4 }} />
+                      <Text style={styles.sessionParticipants}>{session.participants} participantes</Text>
+                    </View>
                     <TouchableOpacity>
                         <Text style={styles.detailsButtonText}>Ver Detalhes</Text>
                     </TouchableOpacity>
@@ -196,7 +210,10 @@ const MindfulnessScreen: React.FC = () => {
 
       <View style={styles.actionButtonsContainer}>
         <TouchableOpacity style={styles.completeButton} onPress={handleCompleteSession}>
-          <Text style={styles.completeButtonText}>⚡ Completei Sessão!</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon name="zap" size={18} color="#ffffff" style={{ marginRight: 8 }} />
+            <Text style={styles.completeButtonText}>Completei Sessão!</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.resetButtonText}>Reset</Text>
@@ -219,20 +236,24 @@ const MindfulnessScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.playIconContainer}>
-              <Text style={styles.playIcon}>▶</Text>
+              <Icon name="play" size={20} color="#ffffff" />
             </View>
             <View style={styles.sessionDetailsContainer}>
               <View style={styles.sessionTitleRow}>
                 <Text style={styles.sessionTitle}>{session.titulo}</Text>
-                <Text style={styles.sessionDuration}>⚡ {session.duracao}min</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon name="zap" size={14} color="#f59e0b" style={{ marginRight: 4 }} />
+                  <Text style={styles.sessionDuration}>{session.duracao}min</Text>
+                </View>
               </View>
               <Text style={styles.sessionDescription}>
                 {session.descricao || 'Sem descrição'}
               </Text>
               <View style={styles.sessionFooter}>
-                <Text style={styles.sessionParticipants}>
-                  👥 {session.participants ?? 0} participantes
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon name="users" size={14} color="#374151" style={{ marginRight: 4 }} />
+                  <Text style={styles.sessionParticipants}>{session.participants ?? 0} participantes</Text>
+                </View>
                 <TouchableOpacity>
                   <Text style={styles.detailsButtonText}>Ver Detalhes</Text>
                 </TouchableOpacity>

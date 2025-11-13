@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 import { LineChart, BarChart, PieChart } from "react-native-chart-kit";
 import styles from './styles';
+import { Icon } from '../../components/ui/Icon';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -265,7 +266,7 @@ export default function AnalyticsReports() {
             <View style={styles.controlsRow}>
                 <TouchableOpacity style={styles.selectTrigger}>
                     <Text style={styles.selectText}>Últimos 30 dias</Text>
-                    <Text style={{ fontSize: 16, color: "#6b7280", marginLeft: 4 }}>[⌄]</Text>
+                    <Icon name="chevron-down" size={16} color="#6b7280" style={{ marginLeft: 4 }} />
                 </TouchableOpacity>
                 <Button
                     title="Exportar"
@@ -284,8 +285,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>82%</Text>
                         </View>
                         <View style={styles.trendUp}>
-                            {/* SUBSTITUÍDO: Icon name="trending-up" */}
-                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text>
+                            <Icon name="arrow-up-right" size={16} color="#10b981" style={{ marginRight: 4 }} />
                             <Text style={styles.trendTextUp}>+5%</Text>
                         </View>
                     </View>
@@ -297,7 +297,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>89%</Text>
                         </View>
                         <View style={styles.trendUp}>
-                            <Text style={{ fontSize: 16, color: "#10b981", marginRight: 4 }}>[↗]</Text>
+                            <Icon name="arrow-up-right" size={16} color="#10b981" style={{ marginRight: 4 }} />
                             <Text style={styles.trendTextUp}>+3%</Text>
                         </View>
                     </View>
@@ -309,7 +309,7 @@ export default function AnalyticsReports() {
                             <Text style={styles.metricValue}>29%</Text>
                         </View>
                         <View style={styles.trendDown}>
-                            <Text style={{ fontSize: 16, color: "#ef4444", marginRight: 4 }}>[↘]</Text>
+                            <Icon name="arrow-up-right" size={16} color="#ef4444" style={{ marginRight: 4, transform: [{ rotate: '225deg' }] }} />
                             <Text style={styles.trendTextDown}>-8%</Text>
                         </View>
                     </View>
@@ -330,10 +330,10 @@ export default function AnalyticsReports() {
 
             <Tabs defaultValue="trends" style={styles.tabsWrapper}>
                 <TabsList style={styles.tabsListStyle}>
-                    <TabsTrigger value="trends"><Text style={{ fontSize: 12 }}>[✨] Tendências</Text></TabsTrigger>
-                    <TabsTrigger value="sessions"><Text style={{ fontSize: 12 }}>[📊] Sessões</Text></TabsTrigger>
-                    <TabsTrigger value="players"><Text style={{ fontSize: 12 }}>[👥] Individual</Text></TabsTrigger>
-                    <TabsTrigger value="mood"><Text style={{ fontSize: 12 }}>[😊] Ânimo</Text></TabsTrigger>
+                    <TabsTrigger value="trends"><Text style={{ fontSize: 12 }}>Tendências</Text></TabsTrigger>
+                    <TabsTrigger value="sessions"><Text style={{ fontSize: 12 }}>Sessões</Text></TabsTrigger>
+                    <TabsTrigger value="players"><Text style={{ fontSize: 12 }}>Individual</Text></TabsTrigger>
+                    <TabsTrigger value="mood"><Text style={{ fontSize: 12 }}>Ânimo</Text></TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="trends">
