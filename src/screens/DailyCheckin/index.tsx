@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Slider from '@react-native-community/slider';
 import styles from "./styles";
+import { Icon } from "../../components/ui/Icon";
 
 
 interface CheckInData {
@@ -58,10 +59,10 @@ const goalOptions = [
 ];
 
 const moodOptions = [
-    { value: "great", label: "Excelente", icon: '😊', color: "#22c55e" },
-    { value: "good", label: "Bom", icon: '🙂', color: "#3b82f6" },
-    { value: "neutral", label: "Neutro", icon: '😐', color: "#eab308" },
-    { value: "bad", label: "Ruim", icon: '🙁', color: "#f97316" },
+    { value: "great", label: "Excelente", iconName: 'smile', color: "#22c55e" },
+    { value: "good", label: "Bom", iconName: 'smile', color: "#3b82f6" },
+    { value: "neutral", label: "Neutro", iconName: 'meh', color: "#eab308" },
+    { value: "bad", label: "Ruim", iconName: 'frown', color: "#f97316" },
 ];
 
 
@@ -87,32 +88,14 @@ const Button: React.FC<{ title: string; onPress: () => void; style?: any }> = ({
     </TouchableOpacity>
 );
 
-const iconMap = {
-    "zap": "⚡",
-    "moon": "🌙",
-    "brain": "🧠",
-    "heart": "❤️",
-    "thumbs-up": "👍",
-    "utensils": "🍴",
-    "alert-circle": "⚠️",
-    "info": "ⓘ",
-    "check": "✓",
-    "clock": "⏰",
-    "trending-up": "📈",
-    "smile": "😊",
-    "meh": "😐",
-    "frown": "🙁",
-};
-
-const getIcon = (name: keyof typeof iconMap, size: number, color: string, style?: any) => {
-    const text = iconMap[name] || '[?]';
-    return <Text style={[{ fontSize: size, color: color, marginRight: 8 }, style]}>{text}</Text>;
-};
+const getIcon = (name: string, size: number, color: string, style?: any) => (
+    <Icon name={name} size={size} color={color} style={[{ marginRight: 8 }, style]} />
+);
 
 const SliderWrapper: React.FC<{
     label: string;
     value: number;
-    iconName: keyof typeof iconMap;
+    iconName: string;
     iconColor: string;
     onValueChange: (value: number) => void;
 }> = ({ label, value, iconName, iconColor, onValueChange }) => {
@@ -151,11 +134,11 @@ const SliderWrapper: React.FC<{
 const MoodOption: React.FC<{
     value: string;
     label: string;
-    icon: string;
+    iconName: string;
     color: string;
     isSelected: boolean;
     onPress: () => void;
-}> = ({ value, label, icon, color, isSelected, onPress }) => (
+}> = ({ value, label, iconName, color, isSelected, onPress }) => (
     <TouchableOpacity
         style={[
             styles.moodOption,
@@ -163,7 +146,7 @@ const MoodOption: React.FC<{
         ]}
         onPress={onPress}
     >
-        <Text style={{ fontSize: 32, color: color, marginBottom: 8 }}>{icon}</Text>
+        <Icon name={iconName} size={32} color={color} style={{ marginBottom: 8 }} />
         <Text style={styles.moodLabel}>{label}</Text>
     </TouchableOpacity>
 );
@@ -225,7 +208,8 @@ export default function DailyCheckIn() {
                         <View style={styles.submittedIconWrapper}>
                             {getIcon("heart", 32, "#22c55e", { marginRight: 0 })}
                         </View>
-                        <Text style={styles.submittedTitle}>Check-in Enviado! 🎉</Text>
+                        <Text style={styles.submittedTitle}>Check-in Enviado!</Text>
+                        <Icon name="party" size={20} color="#f59e0b" style={{ marginTop: 8 }} />
                         <Text style={styles.submittedText}>
                             Obrigado por compartilhar como você está se sentindo hoje.
                             Suas informações ajudam a equipe técnica a oferecer o melhor suporte.
@@ -279,7 +263,7 @@ export default function DailyCheckIn() {
                                             key={option.value}
                                             value={option.value}
                                             label={option.label}
-                                            icon={option.icon}
+                                            iconName={option.iconName}
                                             color={option.color}
                                             isSelected={checkInData.mood === option.value}
                                             onPress={() => handleMoodChange(option.value)}
