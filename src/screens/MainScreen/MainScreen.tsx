@@ -9,6 +9,8 @@ import {
     TouchableOpacity,
     Modal,
 } from 'react-native';
+import { Icon } from '../../components/ui/Icon';
+import { AppLogo } from '../../components/ui/AppLogo';
 
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
@@ -23,28 +25,29 @@ const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style
 const Multidisciplinary = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Multidisciplinary</Text></View>;
 
 const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "⊞" },
-    { id: "players", label: "Atletas", icon: "👤" },
-    { id: "mindfulness", label: "Mindfulness", icon: "☯" },
-    { id: "sleep-hygiene", label: "Higienização do Sono", icon: "🌙" },
-    { id: "multidisciplinary", label: "Multiprofissional", icon: "⚕️" },
-    { id: "checkin", label: "Check-in", icon: "📝" },
-    { id: "analytics", label: "Relatórios", icon: "📊" },
-    { id: "settings", label: "Configurações", icon: "⚙️" },
+    { id: 'dashboard', label: 'Dashboard', iconName: 'dashboard' },
+    { id: 'players', label: 'Atletas', iconName: 'players' },
+    { id: 'mindfulness', label: 'Mindfulness', iconName: 'mindfulness' },
+    { id: 'sleep-hygiene', label: 'Higienização do Sono', iconName: 'sleep-hygiene' },
+    { id: 'multidisciplinary', label: 'Multiprofissional', iconName: 'multidisciplinary' },
+    { id: 'checkin', label: 'Check-in', iconName: 'checkin' },
+    { id: 'analytics', label: 'Relatórios', iconName: 'analytics' },
+    { id: 'settings', label: 'Configurações', iconName: 'settings' },
 ];
 
 const Navigation = ({ onToggleMenu, avatarText }: any) => (
     <View style={styles.headerContainer}>
         <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft}>
-            <Text style={styles.navigationText}>☰</Text>
-            <Image
-                source={{ uri: 'https://placehold.co/24x24/f97316/ffffff?text=🏀' }}
-                style={styles.headerLogo}
-            />
+            <Icon name="menu" size={24} color="#374151" />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-            <Text style={styles.appTitle}>MindfulBasket</Text>
-            <Text style={styles.appSubtitle}>Sistema de Monitoramento</Text>
+            <View style={styles.headerCenterRow}>
+                <AppLogo size={24} style={{ marginRight: 8 }} />
+                <View>
+                    <Text style={styles.appTitle}>MindfulBasket</Text>
+                    <Text style={styles.appSubtitle}>Sistema de Monitoramento</Text>
+                </View>
+            </View>
         </View>
         <View style={styles.headerRight}>
             <Text style={styles.avatar}>{avatarText}</Text>
@@ -68,13 +71,10 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
                 <View style={styles.sideMenuHeader}>
                     
                     <TouchableOpacity onPress={onClose} style={styles.sideMenuHeaderClose}>
-                        <Text style={styles.sideMenuCloseIcon}>✕</Text>
+                        <Icon name="close" size={20} color="#374151" />
                     </TouchableOpacity>
                     
-                    <Image 
-                        source={{ uri: 'https://placehold.co/24x24/f97316/ffffff?text=🏀' }} 
-                        style={styles.sideMenuLogo} 
-                    />
+                    <AppLogo size={24} style={styles.sideMenuLogo} />
                     <View style={styles.sideMenuHeaderCenter}>
                         <Text style={styles.sideMenuAppTitle}>MindfulBasket</Text>
                         <Text style={styles.sideMenuAppSubtitle}>Sistema de Monitoramento</Text>
@@ -94,7 +94,7 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
                                 onClose();
                             }}
                         >
-                            <Text style={styles.menuIconLight}>{item.icon}</Text>
+                            <Icon name={item.iconName} size={20} color="#6b7280" style={{ width: 30, textAlign: 'center' }} />
                             <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
                                 {item.label}
                             </Text>
@@ -106,7 +106,7 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
                         style={styles.logoutButton}
                         onPress={onLogout}
                     >
-                        <Text style={styles.menuIconLight}>🚪</Text>
+                        <Icon name="logout" size={20} color="#ef4444" style={{ width: 30, textAlign: 'center' }} />
                         <Text style={styles.logoutLabel}>Sair</Text>
                     </TouchableOpacity>
                 </View>
@@ -242,7 +242,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        paddingTop: 40,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#e5e7eb',
@@ -251,14 +250,24 @@ const styles = StyleSheet.create({
     headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: 56,
     },
     headerCenter: {
-        flex: 1,
-        alignItems: 'flex-start',
-        marginLeft: 8,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     headerRight: {
         justifyContent: 'center',
+        width: 56,
+    },
+    headerCenterRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     navigationText: {
         color: '#374151',
