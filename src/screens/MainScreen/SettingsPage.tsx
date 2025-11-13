@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Card, CardContent, CardHeader, CardTitle, } from '../../components/ui/Card';
 import { Label } from '../../components/ui/Label';
 import { Input } from '../../components/ui/Input';
 import { Switch } from '../../components/ui/Switch';
 import { Button } from '../../components/ui/Button';
+import { login, logout, getToken } from '../../services/auth';
 
 export const SettingsPage: React.FC = () => {
   const [remindersEnabled, setRemindersEnabled] = useState(true);
@@ -18,7 +19,28 @@ export const SettingsPage: React.FC = () => {
   const [wellnessTarget, setWellnessTarget] = useState('80');
   const [participationTarget, setParticipationTarget] = useState('85');
   const [sessionTarget, setSessionTarget] = useState('3');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    getToken().then(setAuthToken);
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      const { token } = await login(email, senha);
+      setAuthToken(token);
+      console.log('Login realizado com sucesso!');
+    } catch (e) {
+      console.log('Erro no login', e);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setAuthToken(null);
+  };
   const handleSave = () => {
     console.log("Configurações salvas!");
   };
@@ -148,7 +170,7 @@ export const SettingsPage: React.FC = () => {
       <View style={{ height: 50 }} />
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

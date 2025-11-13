@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, Dimensions, Animated, Easing } from "react-native";
 import styles from './styles';
+import { Icon } from '../../components/ui/Icon';
 
-const basketballLogo = require('./assets/basketball-logo.png'); 
+const basketballLogo = require('../../assets/logo.png'); 
 
 interface CelebrationModalProps {
     isOpen: boolean;
@@ -142,40 +143,39 @@ export function CelebrationModal({ isOpen, onClose, streakCount }: CelebrationMo
                         style={[styles.celebrationContent, { opacity: contentAnim, transform: [{ translateY: contentAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }]}
                     >
                         <View style={styles.iconsContainer}>
-                            <Text style={[
-                                { fontSize: 50, color: '#f59e0b', transform: [{ rotate: '-10deg' }] },
-                                { fontFamily: 'System' } 
-                            ]}>
-                                🏆
-                            </Text>
+                            <Icon name="trophy" size={50} color="#f59e0b" style={{ transform: [{ rotate: '-10deg' }] }} />
                             <Image source={basketballLogo} style={styles.mainLogo} />
                         </View>
 
-                        <Text style={styles.title}>🎉 Incrível!</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                          <Icon name="party" size={20} color="#f59e0b" style={{ marginRight: 8 }} />
+                          <Text style={styles.title}>Incrível!</Text>
+                        </View>
                         <Text style={styles.subtitle}>Você completou mais uma sessão!</Text>
 
                         <View style={styles.streakBox}>
                             <View style={styles.streakHeader}>
-                                <Text style={{ fontSize: 16, color: '#f59e0b' }}>⭐</Text>
+                                <Icon name="star" size={16} color="#f59e0b" />
                                 <Text style={styles.streakText}>Sequência Atual</Text>
-                                <Text style={{ fontSize: 16, color: '#f59e0b' }}>⭐</Text>
+                                <Icon name="star" size={16} color="#f59e0b" />
                             </View>
                             <Text style={styles.streakValue}>{streakText}</Text>
                         </View>
 
                         {streakCount >= 3 && (
                             <View style={styles.statusContainer}>
-                                <Text style={{ fontSize: 14, color: '#f59e0b' }}>⭐</Text>
+                                <Icon name="star" size={14} color="#f59e0b" />
                                 <Text style={styles.statusText}>{getStreakMessage()}</Text>
-                                <Text style={{ fontSize: 14, color: '#f59e0b' }}>⭐</Text>
+                                <Icon name="star" size={14} color="#f59e0b" />
                             </View>
                         )}
 
                         {streakCount % 7 === 0 && streakCount > 0 && (
                             <View style={styles.specialMilestone}>
-                                <Text style={styles.specialMilestoneText}>
-                                    🏆 Marco Especial: {streakText}!
-                                </Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                  <Icon name="trophy" size={18} color="#f59e0b" style={{ marginRight: 8 }} />
+                                  <Text style={styles.specialMilestoneText}>Marco Especial: {streakText}!</Text>
+                                </View>
                             </View>
                         )}
                     </Animated.View>
