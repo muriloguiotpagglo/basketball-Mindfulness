@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from "react-native";
+import { Text, TouchableOpacity, StyleSheet, ViewStyle, TextStyle, View } from "react-native";
+import { Icon } from "./Icon";
 
 interface ButtonProps {
   title: string;
@@ -40,7 +41,12 @@ export const Button: React.FC<ButtonProps> = ({
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={[styles.buttonText, { color: textColor }, textStyle]}>{title}</Text>
+      <View style={styles.contentRow}>
+        {iconName && (
+          <Icon name={iconName} size={18} color={textColor} style={{ marginRight: 8 }} />
+        )}
+        <Text style={[styles.buttonText, { color: textColor }, textStyle]}>{title}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -70,4 +76,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
