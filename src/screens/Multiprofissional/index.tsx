@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 4, // Alinha melhor com o título
+    marginTop: 4,
   },
   professionalsSection: {
     paddingHorizontal: 20,

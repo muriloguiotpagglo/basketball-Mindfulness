@@ -18,7 +18,7 @@ import MindfulnessScreen from '../Mindfulness';
 import MultiprofissionalScreen from '../Multiprofissional';
 import { SettingsPage } from './SettingsPage';
  
-import { logout } from '../../services/auth'
+import { logout } from '../../services/auth';
 
 const { width } = Dimensions.get('window');
 
@@ -37,10 +37,10 @@ const menuItems = [
     { id: 'settings', label: 'Configurações', iconName: 'settings' },
 ];
 
-const Navigation = ({ onToggleMenu, avatarText }: any) => (
+const Navigation = ({ onToggleMenu, avatarText, isMenuOpen }: any) => (
     <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft}>
-            <Icon name="menu" size={24} color="#374151" />
+        <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft} hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}>
+            <Icon name={isMenuOpen ? "close" : "menu"} size={24} color="#374151" />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
             <View style={styles.headerCenterRow}>
@@ -67,9 +67,6 @@ const SideMenu = ({ activeTab, onTabChange, onClose, onLogout }: { activeTab: st
         <View style={styles.modalOverlay}>
             <View style={styles.sideMenuContainer}>
                 <ScrollView style={styles.sideMenuScroll}>
-                    <TouchableOpacity onPress={onClose} style={styles.sideMenuCloseButton}>
-                        <Icon name="close" size={24} color="#374151" />
-                    </TouchableOpacity>
                     {menuItems.map(item => (
                         <TouchableOpacity
                             key={item.id}
@@ -158,8 +155,8 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleToggleMenu = () => {
-        setIsMenuOpen(true);
-        console.log("Comportamento de abrir menu lateral acionado. Estado isMenuOpen: true");
+        setIsMenuOpen(prev => !prev);
+        console.log('Sidebar toggle');
     };
     const handleLogout = async () => {
         try {
@@ -195,7 +192,7 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
 
     return (
         <View style={styles.container}>
-            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" />
+            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" isMenuOpen={isMenuOpen} />
             <View style={styles.mainContent}>
                 {renderContent()}
             </View>
@@ -286,10 +283,13 @@ const styles = StyleSheet.create({
     },
 
     modalOverlay: {
-        flex: 1,
+        position: 'absolute',
+        top: 80,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         flexDirection: 'row',
-        marginTop: 64, // Altura aproximada do header principal
     },
     modalTouchOutside: {
         flex: 1,
@@ -302,16 +302,6 @@ const styles = StyleSheet.create({
     sideMenuScroll: {
         flex: 1,
         paddingTop: 16,
-    },
-    sideMenuCloseButton: {
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        marginBottom: 8,
-    },
-    sideMenuCloseButton: {
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        marginBottom: 8,
     },
 
     menuItem: {
@@ -362,7 +352,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    // Estilos do Dashboard (Conteúdo, mantidos)
     dashboardContainer: {
         flex: 1,
         paddingHorizontal: 16,
