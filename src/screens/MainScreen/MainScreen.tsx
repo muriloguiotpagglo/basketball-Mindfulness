@@ -14,8 +14,9 @@ import { AppLogo } from '../../components/ui/AppLogo';
 
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
+import MindfulnessScreen from '../Mindfulness';
 import { SettingsPage } from './SettingsPage';
-import MindfulnessScreen from '../Mindfulness'
+ 
 import { logout } from '../../services/auth'
 
 const { width } = Dimensions.get('window');
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
     },
     mainContent: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     headerContainer: {
         flexDirection: 'row',
