@@ -15,6 +15,7 @@ import { AppLogo } from '../../components/ui/AppLogo';
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
 import MindfulnessScreen from '../Mindfulness';
+import MultiprofissionalScreen from '../Multiprofissional';
 import { SettingsPage } from './SettingsPage';
  
 import { logout } from '../../services/auth'
@@ -23,7 +24,7 @@ const { width } = Dimensions.get('window');
 
 const PlayerProfile = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Player Profile</Text></View>;
 const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Sleep Hygiene</Text></View>;
-const Multidisciplinary = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Multidisciplinary</Text></View>;
+const Multidisciplinary = MultiprofissionalScreen;
 
 const menuItems = [
     { id: 'dashboard', label: 'Dashboard', iconName: 'dashboard' },
