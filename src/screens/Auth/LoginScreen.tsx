@@ -28,9 +28,18 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
   const handleLogin = async () => {
     setError(null);
+    if (!email.trim() || !senha) {
+      setError('Informe e‑mail e senha.');
+      return;
+    }
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      setError('E‑mail inválido.');
+      return;
+    }
     setLoading(true);
     try {
-      const { token } = await login(email.trim().toLowerCase(), senha);
+      const { token } = await login(normalizedEmail, senha);
       if (token) {
         onLoginSuccess();
       } else {
@@ -127,7 +136,7 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <Button
               title={loading ? 'Autenticando...' : 'Entrar'}
               onPress={handleLogin}
-              disabled={loading || !email || !senha}
+              disabled={loading}
             />
 
             <Button
