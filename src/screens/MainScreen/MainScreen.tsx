@@ -57,7 +57,7 @@ const Navigation = ({ onToggleMenu, avatarText }: any) => (
     </View>
 );
 
-const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, avatarText: string, onLogout: () => void }) => (
+const SideMenu = ({ activeTab, onTabChange, onClose, onLogout }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, onLogout: () => void }) => (
     <Modal
         animationType="fade"
         transparent={true}
@@ -66,24 +66,10 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
     >
         <View style={styles.modalOverlay}>
             <View style={styles.sideMenuContainer}>
-                
-                <View style={styles.sideMenuHeader}>
-                    
-                    <TouchableOpacity onPress={onClose} style={styles.sideMenuHeaderClose}>
-                        <Icon name="close" size={20} color="#374151" />
-                    </TouchableOpacity>
-                    
-                    <AppLogo size={24} style={styles.sideMenuLogo} />
-                    <View style={styles.sideMenuHeaderCenter}>
-                        <Text style={styles.sideMenuAppTitle}>MindfulBasket</Text>
-                        <Text style={styles.sideMenuAppSubtitle}>Sistema de Monitoramento</Text>
-                    </View>
-                    <View style={styles.sideMenuHeaderRight}>
-                        <Text style={styles.avatar}>{avatarText}</Text>
-                    </View>
-                </View>
-
                 <ScrollView style={styles.sideMenuScroll}>
+                    <TouchableOpacity onPress={onClose} style={styles.sideMenuCloseButton}>
+                        <Icon name="close" size={24} color="#374151" />
+                    </TouchableOpacity>
                     {menuItems.map(item => (
                         <TouchableOpacity
                             key={item.id}
@@ -219,7 +205,6 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
                     onClose={() => setIsMenuOpen(false)}
-                    avatarText="TS"
                     onLogout={handleLogout}
                 />
             )}
@@ -304,6 +289,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         flexDirection: 'row',
+        marginTop: 64, // Altura aproximada do header principal
     },
     modalTouchOutside: {
         flex: 1,
@@ -315,52 +301,17 @@ const styles = StyleSheet.create({
     },
     sideMenuScroll: {
         flex: 1,
-        paddingTop: 8,
+        paddingTop: 16,
     },
-    sideMenuHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
+    sideMenuCloseButton: {
         paddingHorizontal: 16,
         paddingVertical: 12,
-        paddingTop: 40,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e5e7eb',
-        width: '100%',
+        marginBottom: 8,
     },
-    sideMenuHeaderClose: {
-        position: 'absolute',
-        top: 40,
-        left: 8,
-        zIndex: 10,
-    },
-    sideMenuCloseIcon: {
-        fontSize: 20,
-        color: '#374151',
-        fontWeight: '500',
-    },
-    sideMenuLogo: {
-        width: 24,
-        height: 24,
-        marginLeft: 40,
-    },
-    sideMenuAppTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#1f2937',
-    },
-    sideMenuAppSubtitle: {
-        fontSize: 11,
-        color: '#9ca3af',
-    },
-    sideMenuHeaderCenter: {
-        flex: 1,
-        alignItems: 'flex-start',
-        marginLeft: 8,
-    },
-    sideMenuHeaderRight: {
-        justifyContent: 'center',
+    sideMenuCloseButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        marginBottom: 8,
     },
 
     menuItem: {
