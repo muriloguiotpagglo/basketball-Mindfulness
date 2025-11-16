@@ -63,9 +63,6 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
         onRequestClose={onClose}
     >
         <View style={styles.modalOverlay}>
-            
-            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
-            
             <View style={styles.sideMenuContainer}>
                 
                 <View style={styles.sideMenuHeader}>
@@ -111,6 +108,7 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
                     </TouchableOpacity>
                 </View>
             </View>
+            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
         </View>
     </Modal>
 );
