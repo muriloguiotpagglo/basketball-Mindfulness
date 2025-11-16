@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#f97316', // Cor de exemplo
+    backgroundColor: '#D55C15',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   streakIcon: {
     width: 60,
     height: 60,
-    tintColor: '#f97316', // Cor laranja do fogo
+    tintColor: '#D55C15',
     marginBottom: 10,
   },
   streakNumber: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   streakStatusBadge: {
-    backgroundColor: '#f97316',
+    backgroundColor: '#D55C15',
     paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 20,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10b981', // Verde
   },
   categoryTag: {
-    backgroundColor: '#f97316', // Laranja
+    backgroundColor: '#D55C15',
   },
   sessionTagText: {
     color: '#fff',
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   detailsButtonText: {
-    color: '#f97316',
+    color: '#D55C15',
     fontWeight: 'bold',
     fontSize: 14,
   },

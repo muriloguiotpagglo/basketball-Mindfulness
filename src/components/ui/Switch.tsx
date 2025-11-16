@@ -19,7 +19,7 @@ export const Switch: React.FC<SwitchProps> = ({ onValueChange, value }) => {
 
   const trackColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#e5e7eb', '#f97316'], 
+    outputRange: ['#e5e7eb', '#D55C15'], 
   });
 
   const thumbPosition = animatedValue.interpolate({

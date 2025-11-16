@@ -11,7 +11,7 @@ interface BadgeProps {
 export const Badge: React.FC<BadgeProps> = ({ 
   children, 
   variant = 'default', 
-  color = '#f97316',
+  color = '#D55C15',
   style 
 }) => {
   const isOutline = variant === 'outline';

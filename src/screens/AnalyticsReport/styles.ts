@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
     progressFill: {
         height: '100%',
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         borderRadius: 4,
     },
     sessionsGrid: {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     progressBarFill: {
         height: '100%',
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         borderRadius: 4,
     },
     completionPercentage: {
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     insightTitleYellow: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#f97316',
+        color: '#D55C15',
         marginBottom: 5,
     },
     insightTextYellow: {
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     tabsTriggerActive: {
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
     },
     tabsTriggerText: {
         color: '#fff',

@@ -24,9 +24,9 @@ export const Button: React.FC<ButtonProps> = ({
   const isOutline = variant === 'outline';
   const isDestructive = variant === 'destructive';
 
-  const backgroundColor = isDestructive ? '#ef4444' : isOutline ? 'transparent' : '#f97316';
-  const borderColor = isDestructive ? '#ef4444' : isOutline ? '#f97316' : '#f97316';
-  const textColor = isOutline ? '#f97316' : '#fff';
+  const backgroundColor = isDestructive ? '#ef4444' : isOutline ? 'transparent' : '#D55C15';
+  const borderColor = isDestructive ? '#ef4444' : isOutline ? '#D55C15' : '#D55C15';
+  const textColor = isOutline ? '#D55C15' : '#fff';
 
   return (
     <TouchableOpacity

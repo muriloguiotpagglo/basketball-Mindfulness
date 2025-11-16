@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   avatarFallback: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#f97316',
+    color: '#D55C15',
     textTransform: 'uppercase',
   }
 });

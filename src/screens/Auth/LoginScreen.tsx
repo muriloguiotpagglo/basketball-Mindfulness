@@ -5,6 +5,7 @@ import { Label } from '../../components/ui/Label';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { login, register } from '../../services/auth';
+import { AppLogo } from '../../components/ui/AppLogo';
 
 type Props = {
   onLoginSuccess: () => void;
@@ -93,47 +94,56 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }) => {
 
   return (
     <View style={styles.container}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Entrar</CardTitle>
-        </CardHeader>
-        <CardContent style={styles.cardContent}>
-          <View style={styles.formGroup}>
-            <Label>E-mail</Label>
-            <Input
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              placeholder="voce@exemplo.com"
+      <AppLogo size={150} style={{ alignSelf: 'center', marginBottom: 32 }} />
+
+      {!modoCadastro && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Entrar</CardTitle>
+          </CardHeader>
+          <CardContent style={styles.cardContent}>
+            <View style={styles.formGroup}>
+              <Label>E-mail</Label>
+              <Input
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                placeholder="voce@exemplo.com"
+              />
+            </View>
+            <View style={styles.formGroup}>
+              <Label>Senha</Label>
+              <Input
+                value={senha}
+                onChangeText={setSenha}
+                secureTextEntry
+                placeholder="Sua senha"
+              />
+            </View>
+
+            {error && <Text style={styles.errorText}>{error}</Text>}
+
+            <Button
+              title={loading ? 'Autenticando...' : 'Entrar'}
+              onPress={handleLogin}
+              disabled={loading || !email || !senha}
             />
-          </View>
-          <View style={styles.formGroup}>
-            <Label>Senha</Label>
-            <Input
-              value={senha}
-              onChangeText={setSenha}
-              secureTextEntry
-              placeholder="Sua senha"
+
+            <Button
+              title="Não tem conta? Criar"
+              variant="outline"
+              onPress={() => {
+                setModoCadastro(true);
+                setError(null);
+                setEmail('');
+                setSenha('');
+              }}
+              style={{ borderWidth: 0 }}
             />
-          </View>
-
-          {error && <Text style={styles.errorText}>{error}</Text>}
-
-          <Button
-            title={loading ? 'Autenticando...' : 'Entrar'}
-            onPress={handleLogin}
-            disabled={loading || !email || !senha}
-            iconName="log-in"
-          />
-
-          <Button
-            title="Não tem conta? Criar"
-            variant="outline"
-            onPress={() => setModoCadastro(true)}
-          />
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {modoCadastro && (
         <Card>
@@ -200,7 +210,14 @@ const LoginScreen: React.FC<Props> = ({ onLoginSuccess }) => {
             <Button
               title="Já tenho conta"
               variant="outline"
-              onPress={() => setModoCadastro(false)}
+              onPress={() => {
+                setModoCadastro(false);
+                setCadastroError(null);
+                setNomeCadastro('');
+                setEmailCadastro('');
+                setSenhaCadastro('');
+              }}
+              style={{ borderWidth: 0 }}
             />
           </CardContent>
         </Card>

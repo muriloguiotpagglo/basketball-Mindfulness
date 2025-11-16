@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxChecked: {
-    backgroundColor: '#f97316', 
-    borderColor: '#f97316',
+    backgroundColor: '#D55C15', 
+    borderColor: '#D55C15',
   },
 });

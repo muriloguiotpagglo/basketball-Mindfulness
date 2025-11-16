@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     minWidth: (Dimensions.get('window').width - 32 - 40) / 5,
   },
   moodOptionSelected: {
-    borderColor: '#f97316',
-    backgroundColor: '#fff7ed', // orange-50
+    borderColor: '#D55C15',
+    backgroundColor: '#fff7ed',
   },
   moodOptionUnselected: {
     borderColor: '#d1d5db',
@@ -205,8 +205,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxChecked: {
-    backgroundColor: '#f97316',
-    borderColor: '#f97316',
+    backgroundColor: '#D55C15',
+    borderColor: '#D55C15',
   },
   checkboxLabel: {
     fontSize: 14,
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: '#f97316',
+    backgroundColor: '#D55C15',
     borderRadius: 8,
     paddingVertical: 16,
     paddingHorizontal: 48,

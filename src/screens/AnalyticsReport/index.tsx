@@ -66,8 +66,8 @@ const playerPerformance: PlayerPerformanceData[] = [
 const moodDistribution: MoodDistributionData[] = [
     { name: "Excelente", value: 35, color: "#10b981", legendFontColor: "#10b981", legendFontSize: 14 },
     { name: "Bom", value: 28, color: "#3b82f6", legendFontColor: "#3b82f6", legendFontSize: 14 },
-    { name: "Neutro", value: 20, color: "#f59e0b", legendFontColor: "#f59e0b", legendFontSize: 14 },
-    { name: "Ruim", value: 12, color: "#f97316", legendFontColor: "#f97316", legendFontSize: 14 },
+    { name: "Neutro", value: 20, color: "#D55C15", legendFontColor: "#D55C15", legendFontSize: 14 },
+    { name: "Ruim", value: 12, color: "#D55C15", legendFontColor: "#D55C15", legendFontSize: 14 },
     { name: "Péssimo", value: 5, color: "#ef4444", legendFontColor: "#ef4444", legendFontSize: 14 }
 ];
 
@@ -91,7 +91,7 @@ const LineChartTrends: React.FC = () => {
     const data = {
         labels: wellnessData.map(d => d.date),
         datasets: [
-            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, name: "Bem-estar" },
+            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(213, 92, 21, ${opacity})`, name: "Bem-estar" },
             { data: wellnessData.map(d => d.energy), color: (opacity = 1) => `rgba(16, 185, 129, ${opacity})`, name: "Energia" }, // emerald-500
             { data: wellnessData.map(d => d.focus), color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`, name: "Foco" }, // blue-500
             { data: wellnessData.map(d => d.stress), color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`, name: "Stress" },
@@ -132,7 +132,7 @@ const BarChartSessions: React.FC = () => {
             height={200}
             chartConfig={{
                 ...chartConfig,
-                color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, 
+                color: (opacity = 1) => `rgba(213, 92, 21, ${opacity})`, 
             }}
             style={styles.chartStyle}
             fromZero={true}
@@ -176,7 +176,7 @@ const PlayerPerformanceList: React.FC = () => (
             <View key={index} style={styles.playerItem}>
                 <View style={styles.playerInfo}>
                     <View style={styles.playerIconBg}>
-                        <Text style={{ color: "#f97316", fontSize: 20 }}>[👥]</Text>
+                        <Text style={{ color: "#D55C15", fontSize: 20 }}>[👥]</Text>
                     </View>
                     <View>
                         <Text style={styles.playerName}>{player.name}</Text>
@@ -247,7 +247,7 @@ export default function AnalyticsReports() {
     const data = {
         labels: wellnessData.map(d => d.date),
         datasets: [
-            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`, name: "Bem-estar" },
+            { data: wellnessData.map(d => d.wellbeing), color: (opacity = 1) => `rgba(213, 92, 21, ${opacity})`, name: "Bem-estar" },
             { data: wellnessData.map(d => d.energy), color: (opacity = 1) => `rgba(16, 185, 129, ${opacity})`, name: "Energia" },
             { data: wellnessData.map(d => d.focus), color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`, name: "Foco" },
             { data: wellnessData.map(d => d.stress), color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`, name: "Stress" },

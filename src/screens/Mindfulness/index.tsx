@@ -133,7 +133,7 @@ const MindfulnessScreen: React.FC = () => {
 
       {/* Contador de Dias Consecutivos */}
       <View style={styles.streakContainer}>
-        <Icon name="fire" size={24} color="#f9a82c" style={styles.streakIcon} />
+        <Icon name="fire" size={24} color="#D55C15" style={styles.streakIcon} />
         <Text style={styles.streakNumber}>{currentStreak}</Text>
         <Text style={styles.streakLabel}>dias consecutivos</Text>
         <View style={styles.streakStatusBadge}>
@@ -158,14 +158,14 @@ const MindfulnessScreen: React.FC = () => {
       {/* Próximos Marcos */}
       <View style={styles.milestonesContainer}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name="trophy" size={20} color="#f59e0b" style={{ marginRight: 8 }} />
+          <Icon name="trophy" size={20} color="#D55C15" style={{ marginRight: 8 }} />
           <Text style={styles.milestonesTitle}>Próximos Marcos</Text>
         </View>
         <View style={styles.milestonesGrid}>
           {milestones.map(milestone => (
             <View key={milestone.id} style={[styles.milestoneBox, milestone.achieved ? styles.milestoneAchieved : styles.milestonePending]}>
               <Text style={styles.milestoneDays}>{milestone.days}</Text>
-              <Icon name={milestone.achieved ? 'star' : 'target'} size={18} color={milestone.achieved ? '#f59e0b' : '#374151'} />
+              <Icon name={milestone.achieved ? 'star' : 'target'} size={18} color={milestone.achieved ? '#D55C15' : '#374151'} />
             </View>
           ))}
         </View>
@@ -187,7 +187,7 @@ const MindfulnessScreen: React.FC = () => {
                 <View style={styles.sessionTitleRow}>
                     <Text style={styles.sessionTitle}>{session.title}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Icon name="zap" size={14} color="#f59e0b" style={{ marginRight: 4 }} />
+                      <Icon name="zap" size={14} color="#D55C15" style={{ marginRight: 4 }} />
                       <Text style={styles.sessionDuration}>{session.duration}min</Text>
                     </View>
                 </View>
@@ -242,7 +242,7 @@ const MindfulnessScreen: React.FC = () => {
               <View style={styles.sessionTitleRow}>
                 <Text style={styles.sessionTitle}>{session.titulo}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Icon name="zap" size={14} color="#f59e0b" style={{ marginRight: 4 }} />
+                  <Icon name="zap" size={14} color="#D55C15" style={{ marginRight: 4 }} />
                   <Text style={styles.sessionDuration}>{session.duracao}min</Text>
                 </View>
               </View>

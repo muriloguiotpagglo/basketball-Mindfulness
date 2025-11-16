@@ -147,7 +147,7 @@ const TeamDashboard = () => (
         <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Nível de Stress</Text>
             <Text style={styles.metricValue}>35%</Text>
-            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#f97316' }]} /></View>
+            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#D55C15' }]} /></View>
         </View>
 
         <View style={styles.activitiesCard}>
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         color: '#fff',
         textAlign: 'center',
         lineHeight: 32,
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
     },
     mainCard: {
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         padding: 20,
         borderRadius: 12,
         marginBottom: 16,

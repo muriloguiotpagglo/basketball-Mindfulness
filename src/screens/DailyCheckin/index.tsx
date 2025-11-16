@@ -62,7 +62,7 @@ const moodOptions = [
     { value: "great", label: "Excelente", iconName: 'smile', color: "#22c55e" },
     { value: "good", label: "Bom", iconName: 'smile', color: "#3b82f6" },
     { value: "neutral", label: "Neutro", iconName: 'meh', color: "#eab308" },
-    { value: "bad", label: "Ruim", iconName: 'frown', color: "#f97316" },
+    { value: "bad", label: "Ruim", iconName: 'frown', color: "#D55C15" },
 ];
 
 
@@ -209,7 +209,7 @@ export default function DailyCheckIn() {
                             {getIcon("heart", 32, "#22c55e", { marginRight: 0 })}
                         </View>
                         <Text style={styles.submittedTitle}>Check-in Enviado!</Text>
-                        <Icon name="party" size={20} color="#f59e0b" style={{ marginTop: 8 }} />
+                        <Icon name="party" size={20} color="#D55C15" style={{ marginTop: 8 }} />
                         <Text style={styles.submittedText}>
                             Obrigado por compartilhar como você está se sentindo hoje.
                             Suas informações ajudam a equipe técnica a oferecer o melhor suporte.
@@ -324,14 +324,14 @@ export default function DailyCheckIn() {
                                     label="Alimentação"
                                     value={checkInData.nutrition}
                                     iconName="utensils"
-                                    iconColor="#f97316"
+                                    iconColor="#D55C15"
                                     onValueChange={(value) => handleSliderChange('nutrition', value)}
                                 />
                                 <SliderWrapper
                                     label="Preocupação"
                                     value={checkInData.concerns}
                                     iconName="alert-circle"
-                                    iconColor="#f59e0b"
+                                    iconColor="#D55C15"
                                     onValueChange={(value) => handleSliderChange('concerns', value)}
                                 />
                             </CardContent>
@@ -414,7 +414,7 @@ export default function DailyCheckIn() {
                                     label="Intensidade do Treino"
                                     value={checkInData.trainingIntensity}
                                     iconName="zap"
-                                    iconColor="#f97316"
+                                    iconColor="#D55C15"
                                     onValueChange={(value) => handleSliderChange('trainingIntensity', value)}
                                 />
                             </CardContent>
