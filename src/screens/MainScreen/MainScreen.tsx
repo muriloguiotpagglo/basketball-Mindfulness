@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     View,
     Text,
@@ -7,7 +7,8 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
-    Modal,
+    Animated,
+    Easing,
 } from 'react-native';
 import { Icon } from '../../components/ui/Icon';
 import { AppLogo } from '../../components/ui/AppLogo';
@@ -37,10 +38,17 @@ const menuItems = [
     { id: 'settings', label: 'Configurações', iconName: 'settings' },
 ];
 
-const Navigation = ({ onToggleMenu, avatarText, isMenuOpen }: any) => (
-    <View style={styles.headerContainer}>
+const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHeader }: any) => (
+    <View style={styles.headerContainer} onLayout={onLayoutHeader}>
         <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft} hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}>
-            <Icon name={isMenuOpen ? "close" : "menu"} size={24} color="#374151" />
+            <View style={{ width: 24, height: 24 }}>
+                <Animated.View style={{ position: 'absolute', opacity: menuAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }), transform: [{ rotate: menuAnim.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '90deg'] }) }] }}>
+                    <Icon name="menu" size={24} color="#374151" />
+                </Animated.View>
+                <Animated.View style={{ position: 'absolute', opacity: menuAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }), transform: [{ rotate: menuAnim.interpolate({ inputRange: [0, 1], outputRange: ['-90deg', '0deg'] }) }] }}>
+                    <Icon name="close" size={24} color="#374151" />
+                </Animated.View>
+            </View>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
             <View style={styles.headerCenterRow}>
@@ -57,45 +65,38 @@ const Navigation = ({ onToggleMenu, avatarText, isMenuOpen }: any) => (
     </View>
 );
 
-const SideMenu = ({ activeTab, onTabChange, onClose, onLogout }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, onLogout: () => void }) => (
-    <Modal
-        animationType="fade"
-        transparent={true}
-        visible={true}
-        onRequestClose={onClose}
-    >
-        <View style={styles.modalOverlay}>
-            <View style={styles.sideMenuContainer}>
-                <ScrollView style={styles.sideMenuScroll}>
-                    {menuItems.map(item => (
-                        <TouchableOpacity
-                            key={item.id}
-                            style={[styles.menuItem, activeTab === item.id && styles.menuItemActive]}
-                            onPress={() => {
-                                onTabChange(item.id);
-                                onClose();
-                            }}
-                        >
-                            <Icon name={item.iconName} size={20} color={activeTab === item.id ? '#D55C15' : '#6b7280'} style={{ width: 30, textAlign: 'center' }} />
-                            <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
-                                {item.label}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-                <View style={styles.sideMenuFooter}>
+const SideMenu = ({ activeTab, onTabChange, onClose, onLogout, topOffset }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, onLogout: () => void, topOffset: number }) => (
+    <View style={[styles.modalOverlay, { top: topOffset }]}>
+        <View style={styles.sideMenuContainer}>
+            <ScrollView style={styles.sideMenuScroll}>
+                {menuItems.map(item => (
                     <TouchableOpacity
-                        style={styles.logoutButton}
-                        onPress={onLogout}
+                        key={item.id}
+                        style={[styles.menuItem, activeTab === item.id && styles.menuItemActive]}
+                        onPress={() => {
+                            onTabChange(item.id);
+                            onClose();
+                        }}
                     >
-                        <Icon name="logout" size={20} color="#ef4444" style={{ width: 30, textAlign: 'center' }} />
-                        <Text style={styles.logoutLabel}>Sair</Text>
+                        <Icon name={item.iconName} size={20} color={activeTab === item.id ? '#D55C15' : '#6b7280'} style={{ width: 30, textAlign: 'center' }} />
+                        <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
+                            {item.label}
+                        </Text>
                     </TouchableOpacity>
-                </View>
+                ))}
+            </ScrollView>
+            <View style={styles.sideMenuFooter}>
+                <TouchableOpacity
+                    style={styles.logoutButton}
+                    onPress={onLogout}
+                >
+                    <Icon name="logout" size={20} color="#ef4444" style={{ width: 30, textAlign: 'center' }} />
+                    <Text style={styles.logoutLabel}>Sair</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
         </View>
-    </Modal>
+        <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
+    </View>
 );
 
 const TeamDashboard = () => (
@@ -153,16 +154,20 @@ const TeamDashboard = () => (
 export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState("dashboard");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [headerHeight, setHeaderHeight] = useState(0);
+    const menuAnim = useRef(new Animated.Value(0)).current;
 
     const handleToggleMenu = () => {
-        setIsMenuOpen(prev => !prev);
-        console.log('Sidebar toggle');
+        const next = !isMenuOpen;
+        setIsMenuOpen(next);
+        Animated.timing(menuAnim, { toValue: next ? 1 : 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start();
     };
     const handleLogout = async () => {
         try {
             await logout();
         } finally {
             setIsMenuOpen(false);
+            Animated.timing(menuAnim, { toValue: 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start();
             if (onLogout) onLogout();
         }
     };
@@ -192,7 +197,7 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
 
     return (
         <View style={styles.container}>
-            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" isMenuOpen={isMenuOpen} />
+            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" isMenuOpen={isMenuOpen} menuAnim={menuAnim} onLayoutHeader={(e: any) => setHeaderHeight(e.nativeEvent.layout.height)} />
             <View style={styles.mainContent}>
                 {renderContent()}
             </View>
@@ -201,8 +206,9 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
                 <SideMenu
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
-                    onClose={() => setIsMenuOpen(false)}
+                    onClose={() => { setIsMenuOpen(false); Animated.timing(menuAnim, { toValue: 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start(); }}
                     onLogout={handleLogout}
+                    topOffset={headerHeight}
                 />
             )}
         </View>
@@ -284,7 +290,8 @@ const styles = StyleSheet.create({
 
     modalOverlay: {
         position: 'absolute',
-        top: 80,
+        zIndex: 1000,
+        elevation: 10,
         left: 0,
         right: 0,
         bottom: 0,
