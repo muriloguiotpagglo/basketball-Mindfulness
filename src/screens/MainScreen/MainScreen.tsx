@@ -92,7 +92,7 @@ const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { a
                                 onClose();
                             }}
                         >
-                            <Icon name={item.iconName} size={20} color="#6b7280" style={{ width: 30, textAlign: 'center' }} />
+                            <Icon name={item.iconName} size={20} color={activeTab === item.id ? '#D55C15' : '#6b7280'} style={{ width: 30, textAlign: 'center' }} />
                             <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
                                 {item.label}
                             </Text>
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     menuLabelActiveLight: {
-        color: '#1f2937',
+        color: '#000',
         fontWeight: '600',
     },
     sideMenuFooter: {
