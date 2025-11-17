@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
   },
   card: {
     overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   header: {
     flexDirection: 'column',
@@ -44,7 +51,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1f2937',
+    color: '#000000',
   },
   badge: {
     alignSelf: 'flex-start',
@@ -84,7 +91,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: '#4b5563',
+    color: '#6b7280',
     marginBottom: 12,
   },
   startButton: {

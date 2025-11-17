@@ -92,7 +92,7 @@ const MindfulnessScreen: React.FC = () => {
           </View>
           <CardTitle style={styles.title}>{item.titulo}</CardTitle>
           {/* duração removida conforme solicitado */}
-          <Button title="Ver detalhes" onPress={() => { setSelectedPractice(item); setShowDetails(true); }} style={styles.startButton} />
+          <Button title="Ver detalhes" onPress={() => { setSelectedPractice(item); setShowDetails(true); }} style={[styles.startButton, { backgroundColor: '#1f2937', borderColor: '#1f2937' }]} />
         </CardContent>
       </Card>
     );
