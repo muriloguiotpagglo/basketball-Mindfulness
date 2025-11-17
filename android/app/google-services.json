@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "969400341174",
+    "project_id": "basketball-mindfulness",
+    "storage_bucket": "basketball-mindfulness.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969400341174:android:aa5e42616ca6d1f719cc17",
+        "android_client_info": {
+          "package_name": "com.basketball_mindfulness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfp9GHqknqIL7lsLH7Wn17NrRG-qkGQ-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
