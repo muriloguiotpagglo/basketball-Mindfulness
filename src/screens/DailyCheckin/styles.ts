@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4f4f5', // zinc-100
     paddingHorizontal: 16,
   },
+  contentContainer: {
+    paddingBottom: 50,
+  },
   header: {
     paddingVertical: 24,
     alignItems: 'center',
@@ -24,135 +27,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
-  // Conteúdo de submissão
-  submittedContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f4f4f5',
-    padding: 16,
-  },
-  submittedCard: {
-    padding: 32,
-    alignItems: 'center',
-    gap: 16,
-  },
-  submittedIconWrapper: {
-    width: 64,
-    height: 64,
-    backgroundColor: '#dcfce7', // green-100
-    borderRadius: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  submittedTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 8,
-  },
-  submittedText: {
-    fontSize: 14,
-    color: '#6b7280',
-    textAlign: 'center',
-  },
-
-  // Componentes de Card
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    marginBottom: 16,
-  },
-  cardHeader: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  cardContent: {
-    padding: 16,
-    gap: 16,
-  },
-
   // Tabs
-  tabsContainer: {
-    flex: 1,
-  },
-  tabsList: {
+  tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#e5e7eb',
-    borderRadius: 8,
+    justifyContent: 'space-around',
+    backgroundColor: '#e5e7eb', // gray-200
+    borderRadius: 12,
+    marginBottom: 24,
     padding: 4,
-    marginBottom: 16,
-    width: '100%',
   },
-  tabsTrigger: {
+  tabButton: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 12,
-    borderRadius: 6,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  tabsTriggerActive: {
-    backgroundColor: '#fff',
+  tabButtonActive: {
+    backgroundColor: '#ffffff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 2,
-    elevation: 2,
+    elevation: 3,
   },
-  tabsText: {
-    fontSize: 14,
+  tabText: {
+    fontSize: 16,
     fontWeight: '500',
-    color: '#6b7280',
-    marginLeft: 8,
+    color: '#4b5563', // gray-600
   },
-  tabsTextActive: {
-    color: '#1f2937',
-  },
-  tabsContent: {
-    marginBottom: 16,
+  tabTextActive: {
+    color: '#1f2937', // gray-900
+    fontWeight: 'bold',
   },
 
-  // Sliders e seus labels
-  sliderContainer: {
-    gap: 8,
+  // Cards e Layout
+  cardsContainer: {
+    gap: 16,
   },
-  sliderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  flexRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-  },
-  sliderValue: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  slider: {
-    width: '100%',
-    height: 40,
+  card: {
+    // Estilos para o Card (assumindo que o componente Card cuida do fundo e bordas)
   },
 
-  // Botões de Humor (Radio Group)
+  // Seletor de Humor
   moodGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -160,57 +76,60 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   moodOption: {
-    flex: 1,
+    width: Dimensions.get('window').width / 6.5, // Ajustado para 4 opções por linha com espaçamento
+    height: 90,
+    borderWidth: 2,
+    borderRadius: 8,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderWidth: 2,
-    borderColor: '#e5e7eb',
-    borderRadius: 8,
-    minWidth: (Dimensions.get('window').width - 32 - 40) / 5,
+    backgroundColor: '#fff',
+    borderColor: '#d1d5db',
   },
   moodOptionSelected: {
-    borderColor: '#D55C15',
-    backgroundColor: '#fff7ed',
+    borderColor: '#D55C15', // Cor primária (laranja)
+    backgroundColor: '#fff7ed', // Cor de fundo mais clara para o selecionado
   },
   moodOptionUnselected: {
-    borderColor: '#d1d5db',
+    borderColor: '#d1d5db', // Cor padrão
   },
   moodLabel: {
     fontSize: 12,
     fontWeight: '500',
     color: '#374151',
     textAlign: 'center',
+    marginTop: 4,
   },
 
-  // Checkboxes
-  checkboxGrid: {
+  // Sliders
+  sliderContainer: {
+    paddingVertical: 10,
+  },
+  sliderHeader: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
-    width: '48%',
+    marginBottom: 8,
   },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: '#d1d5db',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: '#D55C15',
-    borderColor: '#D55C15',
-  },
-  checkboxLabel: {
+  label: {
     fontSize: 14,
-    color: '#374151',
+    fontWeight: '600',
+    color: '#1f2937',
+  },
+  sliderValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4b5563',
+  },
+  slider: {
+    height: 40,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconMargin: {
+    marginRight: 8
   },
 
   // Textarea
@@ -220,28 +139,29 @@ const styles = StyleSheet.create({
     borderColor: '#d1d5db',
     borderRadius: 8,
     padding: 12,
-    fontSize: 14,
+    marginTop: 16,
     textAlignVertical: 'top',
+    backgroundColor: '#ffffff',
+    fontSize: 14,
     color: '#1f2937',
-    backgroundColor: '#fff',
   },
-  
-  // Botão de submissão
-  submitButtonContainer: {
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#D55C15',
-    borderRadius: 8,
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
+  // Mensagem de Bloqueio (Pós-Treino)
+  notAvailableMessage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 30,
+    backgroundColor: '#e5e7eb', // gray-200
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+  },
+  messageText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+  }
+
+});
 export default styles;

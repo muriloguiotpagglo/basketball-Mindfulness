@@ -14,7 +14,7 @@ export type CreateCheckinPayload = {
 };
 
 export type UpdateCheckinPayload = {
-    humorPos: number; // Humor pós-treino
+    humorPos: number; 
     intensidadeTreino?: number;
     feedbackTreino?: string;
   }
