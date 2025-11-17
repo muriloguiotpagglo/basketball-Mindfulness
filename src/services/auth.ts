@@ -15,7 +15,7 @@ export async function saveDeviceToken(userId: number) {
       console.log("Device token salvo com sucesso no backend");
     }
   } catch (error) {
-    console.error("Erro ao salvar Device Token")
+    console.error("Erro ao salvar Device Token", error)
   }
 }
 
