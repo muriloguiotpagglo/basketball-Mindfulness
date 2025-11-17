@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Image } from 'react-native';
 import styles from './styles';
 import { listPractices, MindfulnessPractice } from '../../services/mindfulness';
-import { Card, CardHeader, CardTitle, CardContent, Badge, Button } from '../../components/ui';
+import { Card, CardTitle, CardContent, Badge, Button } from '../../components/ui';
 
 const MindfulnessScreen: React.FC = () => {
   const [practices, setPractices] = useState<MindfulnessPractice[]>([]);
@@ -61,20 +61,30 @@ const MindfulnessScreen: React.FC = () => {
     const description = item.descricao && item.descricao.trim().length > 0 ? item.descricao : 'Sem descrição';
     const imageSource = item.imageUrl ? { uri: item.imageUrl } : require('../../assets/logo.png');
 
+    const levelColor =
+      item.nivel === 'iniciante'
+        ? '#2563EB'
+        : item.nivel === 'intermediario'
+        ? '#059669'
+        : '#7C3AED';
+
     return (
       <Card style={styles.card}>
-        <CardHeader>
-          <View style={styles.header}>
-            <CardTitle style={styles.title}>{item.titulo}</CardTitle>
-            <View style={styles.badgeRow}>
-              <Badge style={styles.badge}>{item.nivel}</Badge>
+        <CardContent>
+          <View style={styles.imageWrapper}>
+            <Image source={imageSource} style={styles.image} />
+            <View style={styles.overlay}>
+              <Badge style={styles.overlayBadge}>{item.tipo}</Badge>
+              <Badge color={levelColor} style={styles.overlayBadge}>{item.nivel}</Badge>
             </View>
           </View>
-        </CardHeader>
-        <CardContent>
-          <Image source={imageSource} style={styles.image} />
+          <CardTitle style={styles.title}>{item.titulo}</CardTitle>
+          {item.category ? (
+            <View style={styles.badgeRow}>
+              <Badge style={styles.badge}>{item.category}</Badge>
+            </View>
+          ) : null}
           <View style={styles.metaRow}>
-            <Badge variant="outline" style={styles.metaBadge}>{item.tipo}</Badge>
             <Text style={styles.metaText}>{item.duracao} min</Text>
           </View>
           <Text style={styles.description}>{description}</Text>

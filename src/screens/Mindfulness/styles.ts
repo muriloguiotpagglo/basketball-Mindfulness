@@ -55,6 +55,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
+  imageWrapper: {
+    position: 'relative',
+    marginBottom: 12,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  overlayBadge: {
+    marginRight: 8,
+  },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
