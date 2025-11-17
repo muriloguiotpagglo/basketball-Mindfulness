@@ -54,7 +54,7 @@ const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHe
             <View style={styles.headerCenterRow}>
                 <AppLogo size={24} style={{ marginRight: 8 }} />
                 <View>
-                    <Text style={styles.appTitle}>MindfulBasket</Text>
+                    <Text style={styles.appTitle}>MindDunk</Text>
                     <Text style={styles.appSubtitle}>Sistema de Monitoramento</Text>
                 </View>
             </View>

@@ -84,11 +84,9 @@ const MindfulnessScreen: React.FC = () => {
               <Badge style={styles.badge}>{item.category}</Badge>
             </View>
           ) : null}
-          <View style={styles.metaRow}>
-            <Text style={styles.metaText}>{item.duracao} min</Text>
-          </View>
+          {/* duração removida conforme solicitado */}
           <Text style={styles.description}>{description}</Text>
-          <Button title="Iniciar" onPress={() => {}} style={styles.startButton} />
+          <Button title="Ver detalhes" onPress={() => {}} style={styles.startButton} />
         </CardContent>
       </Card>
     );
