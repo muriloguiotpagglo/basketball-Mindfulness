@@ -5,7 +5,7 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: '#121212',
+        backgroundColor: '#FFFFFF',
     },
     contentPadding: {
         paddingHorizontal: 16,
@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     mainTitle: {
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#fff',
+        color: '#000000',
     },
     subtitle: {
-        fontSize: 16,
-        color: '#a0a0a0',
+        fontSize: 14,
+        color: '#6b7280',
     },
     controlsRow: {
         flexDirection: 'row',
@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
     selectTrigger: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#282828',
+        backgroundColor: '#f3f4f6',
         borderRadius: 8,
         paddingVertical: 8,
         paddingHorizontal: 12,
     },
     selectText: {
-        color: '#fff',
+        color: '#374151',
         fontSize: 14,
     },
     metricGrid: {
@@ -49,29 +49,49 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     metricCard: {
-        width: (width - 32 - 16) / 2, // screenWidth - padding - gap / 2
+        width: (width - 32 - 16) / 2,
         marginBottom: 16,
-        backgroundColor: '#282828',
+        backgroundColor: '#FFFFFF',
         borderRadius: 12,
         padding: 15,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     metricContent: {
-        // Adicione estilos específicos se houver
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     metricLabel: {
-        fontSize: 14,
-        color: '#a0a0a0',
-        marginBottom: 5,
+        fontSize: 12,
+        color: '#6b7280',
+        marginBottom: 4,
     },
     metricValue: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#fff',
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#1f2937',
     },
-    metricHint: {
+    trendUp: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    trendDown: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    trendTextUp: {
         fontSize: 12,
         color: '#10b981',
-        marginTop: 5,
+        fontWeight: '600',
+    },
+    trendTextDown: {
+        fontSize: 12,
+        color: '#ef4444',
+        fontWeight: '600',
     },
     progressBar: {
         height: 8,
@@ -85,9 +105,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     sessionsGrid: {
-        // flexDirection: 'row', // Removido conforme nossa discussão anterior
-        // justifyContent: 'space-between', // Removido conforme nossa discussão anterior
-        gap: 16, // Adicionado para espaçamento vertical
+        gap: 16,
         marginBottom: 20,
     },
     halfCard: {
@@ -96,7 +114,7 @@ const styles = StyleSheet.create({
     },
     chartStyle: {
         marginVertical: 8,
-        borderRadius: 16,
+        borderRadius: 12,
     },
     completionListContainer: {
         // Estilos para o contêiner da lista de conclusão
@@ -112,16 +130,16 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 14,
         fontWeight: '500',
-        color: '#fff',
+        color: '#1f2937',
     },
     completionProgressWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     progressBarBackground: {
-        width: 100, // Largura fixa para a barra de progresso
+        width: 100,
         height: 8,
-        backgroundColor: '#444',
+        backgroundColor: '#f3f4f6',
         borderRadius: 4,
         marginRight: 8,
     },
@@ -132,7 +150,7 @@ const styles = StyleSheet.create({
     },
     completionPercentage: {
         fontSize: 14,
-        color: '#fff',
+        color: '#1f2937',
         fontWeight: 'bold',
     },
     playerList: {
@@ -142,10 +160,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#282828',
+        backgroundColor: '#FFFFFF',
         borderRadius: 12,
         padding: 15,
         marginBottom: 10,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     playerInfo: {
         flexDirection: 'row',
@@ -155,7 +178,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#333',
+        backgroundColor: '#f3f4f6',
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 10,
@@ -163,11 +186,11 @@ const styles = StyleSheet.create({
     playerName: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#fff',
+        color: '#000000',
     },
     playerSessions: {
         fontSize: 12,
-        color: '#a0a0a0',
+        color: '#6b7280',
     },
     playerStats: {
         flexDirection: 'row',
@@ -180,7 +203,7 @@ const styles = StyleSheet.create({
     },
     playerStreakText: {
         fontSize: 14,
-        color: '#a0a0a0',
+        color: '#6b7280',
     },
     pieChartWrapper: {
         alignItems: 'center',
@@ -195,69 +218,68 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     insightBoxGreen: {
-        backgroundColor: '#166534',
+        backgroundColor: '#ecfdf5',
     },
     insightBoxYellow: {
-        backgroundColor: '#422006',
+        backgroundColor: '#fff7ed',
     },
     insightBoxBlue: {
-        backgroundColor: '#1e3a8a',
+        backgroundColor: '#eff6ff',
     },
     insightTitleGreen: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#22c55e',
-        marginBottom: 5,
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#166534',
+        marginBottom: 4,
     },
     insightTextGreen: {
         fontSize: 14,
-        color: '#a0a0a0',
+        color: '#374151',
     },
     insightTitleYellow: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '600',
         color: '#D55C15',
-        marginBottom: 5,
+        marginBottom: 4,
     },
     insightTextYellow: {
         fontSize: 14,
-        color: '#a0a0a0',
+        color: '#374151',
     },
     insightTitleBlue: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#60a5fa',
-        marginBottom: 5,
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#1e3a8a',
+        marginBottom: 4,
     },
     insightTextBlue: {
         fontSize: 14,
-        color: '#a0a0a0',
+        color: '#374151',
     },
-    // Estilos para Tabs (se houver)
-    tabsContainer: {
-        marginBottom: 20,
+    tabsWrapper: {
+        marginBottom: 8,
     },
-    tabsList: {
+    tabsListStyle: {},
+    legendContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: '#282828',
-        borderRadius: 8,
-        padding: 5,
-        marginBottom: 10,
+        flexWrap: 'wrap',
+        gap: 12,
+        paddingHorizontal: 16,
+        paddingBottom: 8,
     },
-    tabsTrigger: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 6,
+    legendItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    tabsTriggerActive: {
-        backgroundColor: '#D55C15',
+    legendDot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        marginRight: 6,
     },
-    tabsTriggerText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    tabsTriggerTextInactive: {
-        color: '#a0a0a0',
+    legendText: {
+        fontSize: 12,
+        color: '#6b7280',
     },
 });
+export default styles;
