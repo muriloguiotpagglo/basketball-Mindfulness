@@ -119,12 +119,17 @@ const MindfulnessScreen: React.FC = () => {
                 <>
                   <CardTitle style={styles.detailsTitle}>{selectedPractice.titulo}</CardTitle>
                   <View style={styles.detailsBadgeRow}>
-                    <Badge style={styles.overlayBadge}>{selectedPractice.tipo}</Badge>
-                    <Badge color={selectedPractice.nivel === 'iniciante' ? '#10B981' : selectedPractice.nivel === 'intermediario' ? '#F59E0B' : '#EF4444'} style={styles.overlayBadge}>{selectedPractice.nivel}</Badge>
-                    {selectedPractice.category ? (<Badge variant="outline" style={styles.overlayBadge}>{selectedPractice.category}</Badge>) : null}
+                    <Badge style={styles.detailsBadge}>{selectedPractice.tipo}</Badge>
+                    <Badge color={selectedPractice.nivel === 'iniciante' ? '#10B981' : selectedPractice.nivel === 'intermediario' ? '#F59E0B' : '#EF4444'} style={styles.detailsBadge}>{selectedPractice.nivel}</Badge>
                   </View>
                   <Text style={styles.detailsText}>{selectedPractice.descricao && selectedPractice.descricao.trim().length > 0 ? selectedPractice.descricao : 'Sem descrição'}</Text>
-                  <Button title="Fechar" variant="outline" onPress={() => { setShowDetails(false); setSelectedPractice(null); }} style={styles.startButton} />
+                  <Button
+                    title="Fechar"
+                    variant="outline"
+                    onPress={() => { setShowDetails(false); setSelectedPractice(null); }}
+                    style={[styles.startButton, { backgroundColor: 'transparent', borderWidth: 0 }]}
+                    textStyle={{ color: '#D55C15' }}
+                  />
                 </>
               )}
             </ScrollView>

@@ -116,7 +116,13 @@ const styles = StyleSheet.create({
   detailsBadgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
     marginBottom: 12,
+  },
+  detailsBadge: {
+    marginRight: 8,
+    marginBottom: 8,
   },
   detailsText: {
     fontSize: 14,
