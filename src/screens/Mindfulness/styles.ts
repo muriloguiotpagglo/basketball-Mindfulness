@@ -5,6 +5,76 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  listContent: {
+    padding: 16,
+  },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#6b7280',
+  },
+  errorText: {
+    marginBottom: 12,
+    fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+  },
+  card: {
+    overflow: 'hidden',
+  },
+  header: {
+    flexDirection: 'column',
+    gap: 8,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1f2937',
+  },
+  badge: {
+    alignSelf: 'flex-start',
+  },
+  image: {
+    width: '100%',
+    height: 160,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  metaBadge: {
+    marginRight: 8,
+  },
+  metaText: {
+    fontSize: 14,
+    color: '#374151',
+  },
+  description: {
+    fontSize: 14,
+    color: '#4b5563',
+    marginBottom: 12,
+  },
+  startButton: {
+    marginTop: 4,
+  },
 });
 
 export default styles;
