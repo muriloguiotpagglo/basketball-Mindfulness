@@ -1,9 +1,8 @@
 import { api } from './api';
 
 export type CreateCheckinPayload = {
-  data: string;
+  data: string; // Data do check-in (uso para referência/busca)
   humorPre: number;
-  humorPos: number;
   energia: number;
   sono: number;
   stress: number;
@@ -12,12 +11,21 @@ export type CreateCheckinPayload = {
   satisfacaoPessoal: number;
   alimentacao: number;
   preocupacao: number;
-  intensidadeTreino?: number;
-  feedbackTreino?: string;
 };
 
-export async function createCheckIn(payload: CreateCheckinPayload) {
+export type UpdateCheckinPayload = {
+    humorPos: number; // Humor pós-treino
+    intensidadeTreino?: number;
+    feedbackTreino?: string;
+  }
+
+export async function createPreCheckIn(payload: CreateCheckinPayload): Promise<{ id: number }> {
   const res = await api.post('/checkin', payload);
+  return res.data?.data;
+}
+
+export async function updatePosCheckIn(checkinId: number, payload: UpdateCheckinPayload): Promise<any> {
+  const res = await api.patch(`/checkin/checkout/${checkinId}`, payload); 
   return res.data?.data;
 }
 
