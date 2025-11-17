@@ -39,7 +39,7 @@ const menuItems = [
 ];
 
 const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHeader }: any) => (
-    <View style={styles.headerContainer} onLayout={onLayoutHeader}>
+    <View style={[styles.headerContainer, isMenuOpen && styles.headerNoBorder]} onLayout={onLayoutHeader}>
         <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft} hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}>
             <View style={{ width: 24, height: 24 }}>
                 <Animated.View style={{ position: 'absolute', opacity: menuAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }), transform: [{ rotate: menuAnim.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '90deg'] }) }] }}>
@@ -236,6 +236,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#e5e7eb',
         minHeight: 80,
     },
+    headerNoBorder: {
+        borderBottomWidth: 0,
+        borderBottomColor: 'transparent',
+    },
     headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -291,7 +295,6 @@ const styles = StyleSheet.create({
     modalOverlay: {
         position: 'absolute',
         zIndex: 1000,
-        elevation: 10,
         left: 0,
         right: 0,
         bottom: 0,
