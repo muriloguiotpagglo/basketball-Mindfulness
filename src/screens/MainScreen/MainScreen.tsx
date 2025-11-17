@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     View,
     Text,
@@ -7,22 +7,25 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
-    Modal,
+    Animated,
+    Easing,
 } from 'react-native';
 import { Icon } from '../../components/ui/Icon';
 import { AppLogo } from '../../components/ui/AppLogo';
 
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
+import MindfulnessScreen from '../Mindfulness';
+import MultiprofissionalScreen from '../Multiprofissional';
 import { SettingsPage } from './SettingsPage';
-import MindfulnessScreen from '../Mindfulness'
-import { logout } from '../../services/auth'
+ 
+import { logout } from '../../services/auth';
 
 const { width } = Dimensions.get('window');
 
 const PlayerProfile = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Player Profile</Text></View>;
 const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Sleep Hygiene</Text></View>;
-const Multidisciplinary = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Multidisciplinary</Text></View>;
+const Multidisciplinary = MultiprofissionalScreen;
 
 const menuItems = [
     { id: 'dashboard', label: 'Dashboard', iconName: 'dashboard' },
@@ -35,16 +38,23 @@ const menuItems = [
     { id: 'settings', label: 'Configurações', iconName: 'settings' },
 ];
 
-const Navigation = ({ onToggleMenu, avatarText }: any) => (
-    <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft}>
-            <Icon name="menu" size={24} color="#374151" />
+const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHeader }: any) => (
+    <View style={[styles.headerContainer, isMenuOpen && styles.headerNoBorder]} onLayout={onLayoutHeader}>
+        <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft} hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}>
+            <View style={{ width: 24, height: 24 }}>
+                <Animated.View style={{ position: 'absolute', opacity: menuAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 0] }), transform: [{ rotate: menuAnim.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '90deg'] }) }] }}>
+                    <Icon name="menu" size={24} color="#374151" />
+                </Animated.View>
+                <Animated.View style={{ position: 'absolute', opacity: menuAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }), transform: [{ rotate: menuAnim.interpolate({ inputRange: [0, 1], outputRange: ['-90deg', '0deg'] }) }] }}>
+                    <Icon name="close" size={24} color="#374151" />
+                </Animated.View>
+            </View>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
             <View style={styles.headerCenterRow}>
                 <AppLogo size={24} style={{ marginRight: 8 }} />
                 <View>
-                    <Text style={styles.appTitle}>MindfulBasket</Text>
+                    <Text style={styles.appTitle}>MindDunk</Text>
                     <Text style={styles.appSubtitle}>Sistema de Monitoramento</Text>
                 </View>
             </View>
@@ -55,64 +65,38 @@ const Navigation = ({ onToggleMenu, avatarText }: any) => (
     </View>
 );
 
-const SideMenu = ({ activeTab, onTabChange, onClose, avatarText, onLogout }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, avatarText: string, onLogout: () => void }) => (
-    <Modal
-        animationType="fade"
-        transparent={true}
-        visible={true}
-        onRequestClose={onClose}
-    >
-        <View style={styles.modalOverlay}>
-            
-            <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
-            
-            <View style={styles.sideMenuContainer}>
-                
-                <View style={styles.sideMenuHeader}>
-                    
-                    <TouchableOpacity onPress={onClose} style={styles.sideMenuHeaderClose}>
-                        <Icon name="close" size={20} color="#374151" />
-                    </TouchableOpacity>
-                    
-                    <AppLogo size={24} style={styles.sideMenuLogo} />
-                    <View style={styles.sideMenuHeaderCenter}>
-                        <Text style={styles.sideMenuAppTitle}>MindfulBasket</Text>
-                        <Text style={styles.sideMenuAppSubtitle}>Sistema de Monitoramento</Text>
-                    </View>
-                    <View style={styles.sideMenuHeaderRight}>
-                        <Text style={styles.avatar}>{avatarText}</Text>
-                    </View>
-                </View>
-
-                <ScrollView style={styles.sideMenuScroll}>
-                    {menuItems.map(item => (
-                        <TouchableOpacity
-                            key={item.id}
-                            style={[styles.menuItem, activeTab === item.id && styles.menuItemActive]}
-                            onPress={() => {
-                                onTabChange(item.id);
-                                onClose();
-                            }}
-                        >
-                            <Icon name={item.iconName} size={20} color="#6b7280" style={{ width: 30, textAlign: 'center' }} />
-                            <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
-                                {item.label}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-                <View style={styles.sideMenuFooter}>
+const SideMenu = ({ activeTab, onTabChange, onClose, onLogout, topOffset }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, onLogout: () => void, topOffset: number }) => (
+    <View style={[styles.modalOverlay, { top: topOffset }]}>
+        <View style={styles.sideMenuContainer}>
+            <ScrollView style={styles.sideMenuScroll}>
+                {menuItems.map(item => (
                     <TouchableOpacity
-                        style={styles.logoutButton}
-                        onPress={onLogout}
+                        key={item.id}
+                        style={[styles.menuItem, activeTab === item.id && styles.menuItemActive]}
+                        onPress={() => {
+                            onTabChange(item.id);
+                            onClose();
+                        }}
                     >
-                        <Icon name="logout" size={20} color="#ef4444" style={{ width: 30, textAlign: 'center' }} />
-                        <Text style={styles.logoutLabel}>Sair</Text>
+                        <Icon name={item.iconName} size={20} color={activeTab === item.id ? '#D55C15' : '#6b7280'} style={{ width: 30, textAlign: 'center' }} />
+                        <Text style={[styles.menuLabelLight, activeTab === item.id && styles.menuLabelActiveLight]}>
+                            {item.label}
+                        </Text>
                     </TouchableOpacity>
-                </View>
+                ))}
+            </ScrollView>
+            <View style={styles.sideMenuFooter}>
+                <TouchableOpacity
+                    style={styles.logoutButton}
+                    onPress={onLogout}
+                >
+                    <Icon name="logout" size={20} color="#ef4444" style={{ width: 30, textAlign: 'center' }} />
+                    <Text style={styles.logoutLabel}>Sair</Text>
+                </TouchableOpacity>
             </View>
         </View>
-    </Modal>
+        <TouchableOpacity style={styles.modalTouchOutside} onPress={onClose} />
+    </View>
 );
 
 const TeamDashboard = () => (
@@ -147,7 +131,7 @@ const TeamDashboard = () => (
         <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>Nível de Stress</Text>
             <Text style={styles.metricValue}>35%</Text>
-            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#f97316' }]} /></View>
+            <View style={styles.progressBar}><View style={[styles.progressFill, { width: '35%', backgroundColor: '#D55C15' }]} /></View>
         </View>
 
         <View style={styles.activitiesCard}>
@@ -170,16 +154,20 @@ const TeamDashboard = () => (
 export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState("dashboard");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [headerHeight, setHeaderHeight] = useState(0);
+    const menuAnim = useRef(new Animated.Value(0)).current;
 
     const handleToggleMenu = () => {
-        setIsMenuOpen(true);
-        console.log("Comportamento de abrir menu lateral acionado. Estado isMenuOpen: true");
+        const next = !isMenuOpen;
+        setIsMenuOpen(next);
+        Animated.timing(menuAnim, { toValue: next ? 1 : 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start();
     };
     const handleLogout = async () => {
         try {
             await logout();
         } finally {
             setIsMenuOpen(false);
+            Animated.timing(menuAnim, { toValue: 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start();
             if (onLogout) onLogout();
         }
     };
@@ -209,7 +197,7 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
 
     return (
         <View style={styles.container}>
-            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" />
+            <Navigation onToggleMenu={handleToggleMenu} avatarText="TS" isMenuOpen={isMenuOpen} menuAnim={menuAnim} onLayoutHeader={(e: any) => setHeaderHeight(e.nativeEvent.layout.height)} />
             <View style={styles.mainContent}>
                 {renderContent()}
             </View>
@@ -218,9 +206,9 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
                 <SideMenu
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
-                    onClose={() => setIsMenuOpen(false)}
-                    avatarText="TS"
+                    onClose={() => { setIsMenuOpen(false); Animated.timing(menuAnim, { toValue: 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start(); }}
                     onLogout={handleLogout}
+                    topOffset={headerHeight}
                 />
             )}
         </View>
@@ -235,6 +223,7 @@ const styles = StyleSheet.create({
     },
     mainContent: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     headerContainer: {
         flexDirection: 'row',
@@ -246,6 +235,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#e5e7eb',
         minHeight: 80,
+    },
+    headerNoBorder: {
+        borderBottomWidth: 0,
+        borderBottomColor: 'transparent',
     },
     headerLeft: {
         flexDirection: 'row',
@@ -291,7 +284,7 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         color: '#fff',
         textAlign: 'center',
         lineHeight: 32,
@@ -300,7 +293,11 @@ const styles = StyleSheet.create({
     },
 
     modalOverlay: {
-        flex: 1,
+        position: 'absolute',
+        zIndex: 1000,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         flexDirection: 'row',
     },
@@ -314,52 +311,7 @@ const styles = StyleSheet.create({
     },
     sideMenuScroll: {
         flex: 1,
-        paddingTop: 8,
-    },
-    sideMenuHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        paddingTop: 40,
-        backgroundColor: '#fff',
-        borderBottomWidth: 1,
-        borderBottomColor: '#e5e7eb',
-        width: '100%',
-    },
-    sideMenuHeaderClose: {
-        position: 'absolute',
-        top: 40,
-        left: 8,
-        zIndex: 10,
-    },
-    sideMenuCloseIcon: {
-        fontSize: 20,
-        color: '#374151',
-        fontWeight: '500',
-    },
-    sideMenuLogo: {
-        width: 24,
-        height: 24,
-        marginLeft: 40,
-    },
-    sideMenuAppTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#1f2937',
-    },
-    sideMenuAppSubtitle: {
-        fontSize: 11,
-        color: '#9ca3af',
-    },
-    sideMenuHeaderCenter: {
-        flex: 1,
-        alignItems: 'flex-start',
-        marginLeft: 8,
-    },
-    sideMenuHeaderRight: {
-        justifyContent: 'center',
+        paddingTop: 16,
     },
 
     menuItem: {
@@ -388,7 +340,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     menuLabelActiveLight: {
-        color: '#1f2937',
+        color: '#000',
         fontWeight: '600',
     },
     sideMenuFooter: {
@@ -410,7 +362,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    // Estilos do Dashboard (Conteúdo, mantidos)
     dashboardContainer: {
         flex: 1,
         paddingHorizontal: 16,
@@ -420,7 +371,7 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
     },
     mainCard: {
-        backgroundColor: '#f97316',
+        backgroundColor: '#D55C15',
         padding: 20,
         borderRadius: 12,
         marginBottom: 16,

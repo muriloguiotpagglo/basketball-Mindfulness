@@ -36,6 +36,8 @@ export const ICONS: Record<string, IconDescriptor> = {
   target: { family: 'Feather', name: 'target' },
   play: { family: 'Feather', name: 'play' },
   users: { family: 'Feather', name: 'users' },
+  'user-plus': { family: 'Feather', name: 'user-plus' },
+  'log-in': { family: 'Feather', name: 'log-in' },
   'chevron-down': { family: 'Feather', name: 'chevron-down' },
   'arrow-up-right': { family: 'Feather', name: 'arrow-up-right' },
   party: { family: 'MaterialCommunityIcons', name: 'party-popper' }

@@ -20,7 +20,7 @@ export const Slider: React.FC<SliderProps> = ({
     minimumValue = 0, 
     maximumValue = 100, 
     step = 1,
-    minimumTrackTintColor = '#f97316',
+    minimumTrackTintColor = '#D55C15',
     maximumTrackTintColor = '#d1d5db',
     ...props
 }) => {

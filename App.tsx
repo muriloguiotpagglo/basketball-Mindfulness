@@ -18,7 +18,7 @@ export default function App() {
   if (!checked) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator color="#f97316" size="large" />
+        <ActivityIndicator color="#D55C15" size="large" />
       </View>
     );
   }

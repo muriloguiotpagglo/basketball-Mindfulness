@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#f97316',
+    borderColor: '#D55C15',
   },
   tabText: {
     fontSize: 14,

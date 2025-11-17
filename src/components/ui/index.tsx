@@ -5,7 +5,6 @@ export * from './Input';
 export * from './Label';
 export * from './Switch';
 export * from './Checkbox';
-export * from './RadioGroup';
 
 export * from './Badge';
 export * from './Progress';

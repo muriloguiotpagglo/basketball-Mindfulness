@@ -11,7 +11,7 @@ interface WebGameViewProps {
 const WebGameView: React.FC<WebGameViewProps> = ({ gameUrl, onClose }) => {
   const LoadingIndicatorView = () => (
     <ActivityIndicator 
-      color="#f97316" 
+      color="#D55C15" 
       size="large" 
       style={styles.loading}
     />

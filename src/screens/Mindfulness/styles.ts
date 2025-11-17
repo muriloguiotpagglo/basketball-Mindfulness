@@ -3,300 +3,139 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212', // Cor de fundo escura do mockup
+    backgroundColor: '#fff',
+  },
+  listContent: {
+    padding: 16,
+  },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 16,
   },
-
-  // Header da Aplicação (MindfulBasket)
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 10, // Ajuste conforme necessário para o status bar
-    paddingBottom: 10,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  menuIcon: {
-    width: 24,
-    height: 24,
-    tintColor: '#fff',
-    marginRight: 10,
-  },
-  logoImage: {
-    width: 30,
-    height: 30,
-    marginRight: 8,
-  },
-  appName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  appSubtitle: {
-    fontSize: 12,
-    color: '#ccc',
-  },
-  profileIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#f97316', // Cor de exemplo
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-
-  // Seção de Título (Sessões de Mindfulness)
-  titleSection: {
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  titleHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  titleIcon: {
-    width: 30,
-    height: 30,
-    tintColor: '#fff',
-    marginRight: 10,
-  },
-  titleText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    flex: 1, // Permite que o título ocupe o espaço restante
-  },
-  newSessionButton: {
-    backgroundColor: '#6d28d9', // Cor roxa de exemplo
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-  },
-  newSessionButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  loadingText: {
+    marginTop: 12,
     fontSize: 14,
+    color: '#6b7280',
   },
-  subtitleText: {
-    fontSize: 16,
-    color: '#a0a0a0',
-    marginLeft: 40, // Alinha com o texto do título
-  },
-
-  // Contador de Dias Consecutivos
-  streakContainer: {
-    backgroundColor: '#282828',
-    borderRadius: 12,
-    padding: 20,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  streakIcon: {
-    width: 60,
-    height: 60,
-    tintColor: '#f97316', // Cor laranja do fogo
-    marginBottom: 10,
-  },
-  streakNumber: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  streakLabel: {
-    fontSize: 18,
-    color: '#a0a0a0',
-    marginBottom: 10,
-  },
-  streakStatusBadge: {
-    backgroundColor: '#f97316',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    marginBottom: 8,
-  },
-  streakStatusText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  errorText: {
+    marginBottom: 12,
     fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
   },
-  streakSubtext: {
-    color: '#a0a0a0',
-    fontSize: 14,
-  },
-
-  // Botões de Ação
-  actionButtonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 30,
-    paddingHorizontal: 10,
-  },
-  completeButton: {
-    backgroundColor: '#10b981', // Cor verde de exemplo
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    flex: 1,
-    marginRight: 10,
-    alignItems: 'center',
-  },
-  completeButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  emptyText: {
     fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
   },
-  resetButtonText: {
-    color: '#a0a0a0',
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-  },
-
-  // Próximos Marcos
-  milestonesContainer: {
-    marginBottom: 30,
-  },
-  milestonesTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 15,
-  },
-  milestonesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-  milestoneBox: {
-    width: '30%', // Aproximadamente 3 por linha com espaçamento
-    aspectRatio: 1, // Quadrado
+  card: {
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    justifyContent: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  header: {
+    flexDirection: 'column',
+    gap: 8,
+  },
+  badgeRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#333',
   },
-  milestoneAchieved: {
-    backgroundColor: '#166534', // Verde escuro
-    borderColor: '#22c55e', // Verde
-  },
-  milestonePending: {
-    backgroundColor: '#422006', // Laranja escuro
-    borderColor: '#f97316', // Laranja
-  },
-  milestoneDays: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  milestoneIcon: {
+  title: {
     fontSize: 18,
-    color: '#fff',
-    marginTop: 5,
+    fontWeight: '600',
+    color: '#000000',
   },
-
-  // Lista de Sessões
-  sessionListContainer: {
-    marginBottom: 30,
+  badge: {
+    alignSelf: 'flex-start',
   },
-  sessionCard: {
-    backgroundColor: '#282828',
-    borderRadius: 12,
-    marginBottom: 15,
-    overflow: 'hidden', // Para borderRadius funcionar com a imagem
-  },
-  sessionImage: {
+  image: {
     width: '100%',
-    height: 180,
+    height: 160,
+    borderRadius: 8,
+    marginBottom: 12,
   },
-  sessionTagsContainer: {
-    flexDirection: 'row',
+  imageWrapper: {
+    position: 'relative',
+    marginBottom: 12,
+  },
+  overlay: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: 8,
+    left: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
-  sessionTag: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 15,
+  overlayBadge: {
     marginRight: 8,
   },
-  levelTag: {
-    backgroundColor: '#10b981', // Verde
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  categoryTag: {
-    backgroundColor: '#f97316', // Laranja
+  metaBadge: {
+    marginRight: 8,
   },
-  sessionTagText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
+  metaText: {
+    fontSize: 14,
+    color: '#374151',
   },
-  playIconContainer: {
-    position: 'absolute',
-    top: 75, // Centraliza verticalmente na imagem
-    right: 15, // Alinha à direita
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 30,
-    width: 60,
-    height: 60,
+  description: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 12,
+  },
+  startButton: {
+    marginTop: 4,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 16,
   },
-  playIcon: {
-    color: '#fff',
-    fontSize: 24,
-    marginLeft: 5, // Ajuste para centralizar o triângulo
+  modalContainer: {
+    width: '100%',
+    maxWidth: 600,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    overflow: 'hidden',
   },
-  sessionDetailsContainer: {
-    padding: 15,
+  modalContent: {
+    padding: 16,
   },
-  sessionTitleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-  sessionTitle: {
+  detailsTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-    flexShrink: 1, // Permite que o título encolha se necessário
-    marginRight: 10,
+    fontWeight: '700',
+    color: '#1f2937',
+    marginBottom: 8,
   },
-  sessionDuration: {
-    fontSize: 14,
-    color: '#a0a0a0',
-  },
-  sessionDescription: {
-    fontSize: 14,
-    color: '#a0a0a0',
-    marginBottom: 10,
-  },
-  sessionFooter: {
+  detailsBadgeRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 12,
   },
-  sessionParticipants: {
-    fontSize: 14,
-    color: '#a0a0a0',
+  detailsBadge: {
+    marginRight: 8,
+    marginBottom: 8,
   },
-  detailsButtonText: {
-    color: '#f97316',
-    fontWeight: 'bold',
+  detailsText: {
     fontSize: 14,
+    color: '#4b5563',
+    lineHeight: 20,
+    marginBottom: 12,
   },
 });
 
