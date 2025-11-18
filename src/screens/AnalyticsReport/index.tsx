@@ -5,7 +5,7 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Dimensions,
-  ActivityIndicator // Para o loading
+  ActivityIndicator 
 } from 'react-native';
 import styles from './styles'; // Seu arquivo de estilos
 import { Icon } from '../../components/ui/Icon';
@@ -14,6 +14,9 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/Tabs';
 import { LineChart, BarChart, PieChart } from 'react-native-gifted-charts';
+
+// --- IMPORTAÇÃO DA AUTH (NOVO) ---
+import { getCurrentUser } from '../../services/auth';
 
 // Importa as funções e interfaces do seu serviço
 import { 
@@ -32,10 +35,9 @@ import {
 
 const screenWidth = Dimensions.get('window').width;
 
-// --- COMPONENTES DE GRÁFICO (Todas as Tabs agora são dinâmicas) ---
+// --- COMPONENTES DE GRÁFICO (MANTIDOS IGUAIS) ---
 
 function LineChartTrends({ data }: { data?: AnalyticsTrendData[] }) {
-  
   if (!data || data.length === 0) {
     return (
       <View style={[styles.chartStyle, { height: 280, justifyContent: 'center', alignItems: 'center' }]}>
@@ -43,10 +45,9 @@ function LineChartTrends({ data }: { data?: AnalyticsTrendData[] }) {
       </View>
     );
   }
-  
   const wellbeing = data.map(d => ({ value: d.wellbeing, label: d.date }));
   const energy = data.map(d => ({ value: d.energy, label: d.date }));
-  const focus = data.map(d => ({ value: d.sono, label: d.date })); // <-- CORRIGIDO (era d.sono)
+  const focus = data.map(d => ({ value: d.sono, label: d.date }));
   const stress = data.map(d => ({ value: d.stress, label: d.date }));
 
   return (
@@ -65,7 +66,6 @@ function LineChartTrends({ data }: { data?: AnalyticsTrendData[] }) {
 }
 
 function BarChartSessions({ data }: { data?: AnalyticsSessionData[] }) {
-  
   if (!data || data.length === 0) {
     return (
       <View style={[styles.chartStyle, { height: 200, justifyContent: 'center', alignItems: 'center' }]}>
@@ -87,7 +87,6 @@ function BarChartSessions({ data }: { data?: AnalyticsSessionData[] }) {
 }
 
 function SessionCompletionList({ data }: { data?: AnalyticsSessionData[] }) {
-  
   if (!data || data.length === 0) {
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
@@ -115,7 +114,6 @@ function SessionCompletionList({ data }: { data?: AnalyticsSessionData[] }) {
 }
 
 function PlayerPerformanceList({ data }: { data?: AnalyticsPlayerData[] }) {
-  
   if (!data || data.length === 0) {
     return (
       <View style={[styles.playerList, { justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }]}>
@@ -152,7 +150,6 @@ function PlayerPerformanceList({ data }: { data?: AnalyticsPlayerData[] }) {
 }
 
 function PieChartMood({ data }: { data?: AnalyticsPieChartData[] }) {
-  
   if (!data || data.length === 0) {
     return (
       <View style={[styles.pieChartWrapper, { height: 200, justifyContent: 'center' }]}>
@@ -160,9 +157,7 @@ function PieChartMood({ data }: { data?: AnalyticsPieChartData[] }) {
       </View>
     );
   }
-
   const pieData = data.map(d => ({ value: d.value, color: d.color }));
-  
   return (
     <View style={styles.pieChartWrapper}>
       <PieChart
@@ -178,7 +173,6 @@ function PieChartMood({ data }: { data?: AnalyticsPieChartData[] }) {
 }
 
 function MoodInsights({ data }: { data?: { percentPositivo: number, percentNegativo: number } }) {
-  
   if (!data) {
      return (
       <View style={[styles.moodInsightsContainer, { justifyContent: 'center', alignItems: 'center' }]}>
@@ -186,7 +180,6 @@ function MoodInsights({ data }: { data?: { percentPositivo: number, percentNegat
       </View>
     );
   }
-
   return (
     <View style={styles.moodInsightsContainer}>
       <View style={[styles.moodInsightBox, styles.insightBoxGreen]}>
@@ -209,8 +202,6 @@ function MoodInsights({ data }: { data?: { percentPositivo: number, percentNegat
   );
 }
 
-
-// --- COMPONENTE HELPER PARA INDICADOR DE TENDÊNCIA ---
 const TrendIndicator = ({ value, invert = false }: { value: number | undefined | null, invert?: boolean }) => {
   if (!value || value === 0) {
     return null;
@@ -233,7 +224,6 @@ const TrendIndicator = ({ value, invert = false }: { value: number | undefined |
   );
 };
 
-
 // --- COMPONENTE PRINCIPAL ---
 export default function AnalyticsReports() {
   
@@ -248,12 +238,15 @@ export default function AnalyticsReports() {
   const [error, setError] = useState<string | null>(null);
   const [periodo, setPeriodo] = useState(30); 
 
+  // --- ESTADOS DE PERMISSÃO (NOVO) ---
+  const [verificandoPermissao, setVerificandoPermissao] = useState(true);
+  const [acessoPermitido, setAcessoPermitido] = useState(false);
+
   // Função para buscar TODOS os dados
   const fetchData = async (dias: number) => {
     setIsLoading(true);
     setError(null);
     try {
-      // Inicia as 5 buscas em paralelo
       const [
         mainData, 
         trendsResult, 
@@ -261,11 +254,11 @@ export default function AnalyticsReports() {
         playersResult,
         moodResult
       ] = await Promise.all([
-        getAnalyticsData(dias),         // 1. Dados dos cards
-        getAnalyticsTrendsData(dias),   // 2. Dados do gráfico de linhas
-        getAnalyticsSessionsData(dias), // 3. Dados da tab de sessões
-        getAnalyticsPlayersData(dias),  // 4. Dados da tab de jogadores
-        getAnalyticsMoodData(dias)      // 5. Dados da tab de humor
+        getAnalyticsData(dias),
+        getAnalyticsTrendsData(dias),
+        getAnalyticsSessionsData(dias),
+        getAnalyticsPlayersData(dias),
+        getAnalyticsMoodData(dias)
       ]);
       
       setData(mainData);
@@ -282,18 +275,42 @@ export default function AnalyticsReports() {
     }
   };
 
-  // useEffect para buscar os dados
+  // --- EFFECT 1: VERIFICAÇÃO DE USUÁRIO E PERMISSÃO ---
   useEffect(() => {
-    fetchData(periodo);
-  }, [periodo]); 
+    const verificarUsuario = async () => {
+      setVerificandoPermissao(true);
+      try {
+        const user = await getCurrentUser();
+        // Verifica se existe e é tecnico
+        if (user && user.tipo === 'tecnico') {
+          setAcessoPermitido(true);
+        } else {
+          setAcessoPermitido(false);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar permissão", error);
+        setAcessoPermitido(false);
+      } finally {
+        setVerificandoPermissao(false);
+      }
+    };
 
-  // Legenda dinâmica para o gráfico de linhas
+    verificarUsuario();
+  }, []);
+
+  // --- EFFECT 2: BUSCA DADOS (Só se permitido) ---
+  useEffect(() => {
+    if (acessoPermitido) {
+      fetchData(periodo);
+    }
+  }, [periodo, acessoPermitido]); 
+
+  // Legenda dinâmica
   const dynamicLegend = {
      legend: ['Bem-estar', 'Energia', 'Foco (Sono)', 'Stress'], 
      colors: ['#D55C15', '#10b981', '#3b82f6', '#ef4444'], 
   };
 
-  // Função helper para formatar o texto do botão de período
   const getPeriodoTexto = () => {
     if (periodo === 30) return 'Últimos 30 dias';
     if (periodo === 15) return 'Últimos 15 dias';
@@ -301,9 +318,34 @@ export default function AnalyticsReports() {
     return `Últimos ${periodo} dias`;
   };
 
-  // --- RENDERIZAÇÃO ---
+  // --- RENDERIZAÇÃO CONDICIONAL DE BLOQUEIO ---
 
-  // Estado de Carregamento
+  // 1. Carregando Permissão
+  if (verificandoPermissao) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9fafb' }}>
+        <ActivityIndicator size="large" color="#D55C15" />
+      </View>
+    );
+  }
+
+  // 2. Acesso Negado (Não é técnico)
+  if (!acessoPermitido) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9fafb', padding: 20 }}>
+        <Icon name="lock" size={64} color="#9ca3af" />
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1f2937', marginTop: 20, textAlign: 'center' }}>
+          Acesso Restrito
+        </Text>
+        <Text style={{ marginTop: 10, color: '#6b7280', textAlign: 'center', paddingHorizontal: 20 }}>
+          Esta área de relatórios é exclusiva para a comissão técnica.
+        </Text>
+      </View>
+    );
+  }
+
+  // --- RENDERIZAÇÃO NORMAL (Se for técnico) ---
+
   if (isLoading && !data) { 
     return (
       <View style={[styles.mainContainer, { justifyContent: 'center', alignItems: 'center' }]}>
@@ -313,7 +355,6 @@ export default function AnalyticsReports() {
     );
   }
 
-  // Estado de Erro
   if (error) {
      return (
       <View style={[styles.mainContainer, { justifyContent: 'center', alignItems: 'center', padding: 20 }]}>
@@ -333,7 +374,6 @@ export default function AnalyticsReports() {
     );
   }
 
-  // Conteúdo Principal (Sucesso)
   return (
     <ScrollView style={styles.mainContainer} contentContainerStyle={styles.contentPadding}>
       <View style={styles.header}>
@@ -361,7 +401,7 @@ export default function AnalyticsReports() {
         <Button title="Exportar" onPress={() => {}} iconName="download" variant="outline" style={{ width: 'auto', flexGrow: 0 }} />
       </View>
 
-      {/* --- CARDS DE MÉTRICAS DINÂMICOS --- */}
+      {/* --- CARDS DE MÉTRICAS --- */}
       <View style={styles.metricGrid}>
         <Card style={styles.metricCard}>
           <View style={styles.metricContent}>
@@ -401,7 +441,7 @@ export default function AnalyticsReports() {
         </Card>
       </View>
       
-      {/* --- TABS COM GRÁFICOS --- */}
+      {/* --- TABS --- */}
       <Tabs defaultValue="trends" style={styles.tabsWrapper}>
         <TabsList style={styles.tabsListStyle}>
           <TabsTrigger value="trends"><Text style={{ fontSize: 12 }}>Tendências</Text></TabsTrigger>
@@ -410,7 +450,6 @@ export default function AnalyticsReports() {
           <TabsTrigger value="mood"><Text style={{ fontSize: 12 }}>Estado de Ânimo</Text></TabsTrigger>
         </TabsList>
 
-        {/* Tab 1: Tendências (DINÂMICA) */}
         <TabsContent value="trends">
           <Card>
             <CardHeader>
@@ -430,7 +469,6 @@ export default function AnalyticsReports() {
           </Card>
         </TabsContent>
 
-        {/* Tab 2: Sessões (DINÂMICA) */}
         <TabsContent value="sessions">
           <View style={styles.sessionsGrid}>
             <Card>
@@ -452,7 +490,6 @@ export default function AnalyticsReports() {
           </View>
         </TabsContent>
 
-        {/* Tab 3: Desempenho Individual (DINÂMICA) */}
         <TabsContent value="players">
           <Card>
             <CardHeader>
@@ -464,7 +501,6 @@ export default function AnalyticsReports() {
           </Card>
         </TabsContent>
 
-        {/* Tab 4: Estado de Ânimo (DINÂMICA) */}
         <TabsContent value="mood">
           <View style={styles.sessionsGrid}>
             <Card style={{}}>
@@ -473,7 +509,6 @@ export default function AnalyticsReports() {
               </CardHeader>
               <CardContent style={{ paddingHorizontal: 0 }}>
                 <PieChartMood data={moodData?.pieData} />
-                {/* Legenda para o Gráfico de Pizza */}
                 <View style={[styles.legendContainer, { justifyContent: 'center', paddingBottom: 16, paddingTop: 8 }]}>
                   {moodData?.pieData.map((item, index) => (
                     <View key={index} style={styles.legendItem}>

@@ -20,6 +20,7 @@ import {
   getCheckinForUserAndDay,
   CheckInData 
 } from '../../services/atletas';
+import { getCurrentUser } from '../../services/auth';
 
 /**
  * Componente Helper: Avatar do Atleta
@@ -437,15 +438,21 @@ const CheckinModal = ({ visible, onClose, player }: {
 // --- COMPONENTE PRINCIPAL: PlayersScreen ---
 // --------------------------------------------------------------------
 export default function PlayersScreen() {
+  // --- Estados de Dados ---
   const [players, setPlayers] = useState<AnalyticsPlayerListData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Estados dos Modais
+  // --- Estados de Permissão (NOVO) ---
+  const [verificandoPermissao, setVerificandoPermissao] = useState(true);
+  const [acessoPermitido, setAcessoPermitido] = useState(false);
+
+  // --- Estados dos Modais ---
   const [isHistoryModalVisible, setIsHistoryModalVisible] = useState(false);
   const [isCheckinModalVisible, setIsCheckinModalVisible] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<AnalyticsPlayerListData | null>(null);
 
+  // Função de busca de dados (só será chamada se autorizado)
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
@@ -460,22 +467,72 @@ export default function PlayersScreen() {
     }
   };
 
+  // --- Efeito Principal: Validação e Carga ---
   useEffect(() => {
-    fetchData();
+    const iniciarTela = async () => {
+      setVerificandoPermissao(true);
+      
+      try {
+        // 1. Verifica quem é o usuário
+        const user = await getCurrentUser();
+
+        // 2. Valida se é técnico
+        if (user && user.tipo === 'tecnico') {
+          setAcessoPermitido(true);
+          // 3. Só busca os dados se for técnico
+          await fetchData();
+        } else {
+          setAcessoPermitido(false);
+        }
+      } catch (error) {
+        console.error("Erro ao validar permissão:", error);
+        setAcessoPermitido(false);
+      } finally {
+        setVerificandoPermissao(false);
+      }
+    };
+
+    iniciarTela();
   }, []); 
 
+  // Handlers dos Modais
   const handleCheckin = (player: AnalyticsPlayerListData) => {
-    console.log("Abrir Check-in modal para:", player.name);
     setSelectedPlayer(player);
     setIsCheckinModalVisible(true);
   };
   
   const handleHistory = (player: AnalyticsPlayerListData) => {
-    console.log("Abrir Histórico modal para:", player.name);
     setSelectedPlayer(player);
     setIsHistoryModalVisible(true);
   };
 
+  // --- RENDERIZAÇÃO CONDICIONAL ---
+
+  // 1. Verificando Permissão (Loading Inicial)
+  if (verificandoPermissao) {
+    return (
+      <View style={styles.centeredContainer}>
+        <ActivityIndicator size="large" color="#D55C15" />
+      </View>
+    );
+  }
+
+  // 2. Acesso Bloqueado (Não é técnico)
+  if (!acessoPermitido) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Icon name="lock" size={64} color="#999" />
+        <Text style={[styles.mainTitle, { marginTop: 20, textAlign: 'center' }]}>
+          Acesso Restrito
+        </Text>
+        <Text style={{ marginTop: 10, color: '#666', textAlign: 'center', paddingHorizontal: 40 }}>
+          Esta área é exclusiva para visualização da comissão técnica.
+        </Text>
+      </View>
+    );
+  }
+
+  // 3. Conteúdo Normal (É técnico)
   const renderContent = () => {
     if (isLoading) {
       return (

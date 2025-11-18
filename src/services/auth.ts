@@ -2,6 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api } from './api';
 import messaging from '@react-native-firebase/messaging'
 
+export type UserType = 'tecnico' | 'atleta';
+
+export interface UserProfile {
+  id: number;
+  nome: string;
+  email: string;
+  tipo: UserType;
+  avatar?: string;
+}
+
 export async function saveDeviceToken(userId: number) {
   try {
     await messaging().requestPermission();
@@ -56,3 +66,12 @@ export async function register(user: {
   return res.data;
 }
 
+export async function getCurrentUser(): Promise<UserProfile | null> {
+  try {
+    const response = await api.get('/users/me'); 
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar perfil:', error);
+    return null;
+  }
+}
