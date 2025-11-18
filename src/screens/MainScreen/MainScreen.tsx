@@ -22,6 +22,7 @@ import { SettingsPage } from './SettingsPage';
  
 import { logout } from '../../services/auth';
 import { DashBoardData, getData } from '../../services/dashboard';
+import SleepHygieneScreen from '../HigiSono';
 
 
 const { width } = Dimensions.get('window');
@@ -302,7 +303,7 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
                 return <MindfulnessScreen />;
             // ... (outros cases)
             case "sleep-hygiene":
-                return <SleepHygiene />;
+                return <SleepHygieneScreen />;
             case "checkin":
                 return <DailyCheckIn />;
             case "analytics":
