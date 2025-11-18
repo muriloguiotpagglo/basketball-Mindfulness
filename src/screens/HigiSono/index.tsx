@@ -161,7 +161,7 @@ export default function SleepHygieneScreen() {
       {/* --- Lista de Categorias e Dicas --- */}
       {tipsCategories.map((category) => (
         <Card key={category.category} style={styles.categoryCard}>
-          <CardHeader style={styles.categoryHeader}>
+          <CardHeader>
             <View style={[styles.categoryIconContainer, { backgroundColor: category.bgColor }]}>
               <Icon name={category.icon as any} size={20} color={category.color} />
             </View>
