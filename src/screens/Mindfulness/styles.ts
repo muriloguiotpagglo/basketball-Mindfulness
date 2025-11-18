@@ -380,17 +380,35 @@ const styles = StyleSheet.create({
     color: '#0f172a',
     marginBottom: 16,
   },
-  modalCloseButton: {
+  
+  // --- NOVOS ESTILOS ---
+  // Botão Principal do Modal (Laranja)
+  modalCompleteButton: {
     marginTop: 24,
     padding: 16,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#D55C15', // Botão Primário
     borderRadius: 12,
     alignItems: 'center',
+    shadowColor: '#D55C15',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  modalCloseText: {
-    fontWeight: '600',
-    color: '#0f172a',
+  modalCompleteButtonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#ffffff', // Texto branco
   },
+  
+  // Botão secundário (Cancelar/Fechar pequeno - ícone)
+  modalCloseIcon: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    padding: 8,
+    zIndex: 10,
+  }
 });
 
 export default styles;

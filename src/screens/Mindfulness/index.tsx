@@ -7,11 +7,21 @@ import {
   Image, 
   Modal, 
   ScrollView, 
-  TouchableOpacity 
+  TouchableOpacity,
+  RefreshControl,
+  Alert
 } from 'react-native';
 import styles from './styles';
-import { listPractices, MindfulnessPractice } from '../../services/mindfulness';
-// Ícones importados (assumindo lucide-react-native instalado)
+import { 
+  listPractices, 
+  getMyMindfulnessHistory, 
+  calculateMindfulnessStats,
+  registerMindfulnessSession, // Importado
+  MindfulnessPractice, 
+  DashboardStats
+} from '../../services/mindfulness';
+
+// Ícones
 import { 
   Flame, 
   Zap, 
@@ -19,9 +29,8 @@ import {
   Star, 
   Target, 
   Play, 
-  Clock, 
   Users, 
-  RotateCcw 
+  X // Ícone X para fechar
 } from 'lucide-react-native';
 
 const FALLBACK_IMAGES = [
@@ -31,19 +40,25 @@ const FALLBACK_IMAGES = [
 ];
 
 // Componente auxiliar para badges do Milestone
-const MilestoneItem = ({ day, active, complete, icon: IconComponent }: any) => {
+const MilestoneItem = ({ day, currentStreak }: { day: string, currentStreak: number }) => {
+  const dayNum = parseInt(day, 10);
+  const isComplete = currentStreak >= dayNum;
+  const isActive = !isComplete && (dayNum - currentStreak <= 2 && dayNum - currentStreak > 0);
+
   let borderColor = '#e2e8f0';
   let bgColor = '#f8fafc';
   let textColor = '#64748b';
+  let IconComponent = Target;
 
-  if (active) {
-    borderColor = '#fdba74'; // orange-300
-    bgColor = '#fff7ed'; // orange-50
-    textColor = '#c2410c'; // orange-700
-  } else if (complete) {
-    borderColor = '#22c55e'; // green-500
-    bgColor = '#f0fdf4'; // green-50
-    textColor = '#15803d'; // green-700
+  if (isComplete) {
+    borderColor = '#22c55e'; 
+    bgColor = '#f0fdf4'; 
+    textColor = '#15803d'; 
+    IconComponent = Star;
+  } else if (isActive) {
+    borderColor = '#fdba74'; 
+    bgColor = '#fff7ed'; 
+    textColor = '#c2410c'; 
   }
 
   return (
@@ -58,92 +73,138 @@ const MilestoneItem = ({ day, active, complete, icon: IconComponent }: any) => {
 
 const MindfulnessScreen: React.FC = () => {
   const [practices, setPractices] = useState<MindfulnessPractice[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({ streak: 0, totalSessions: 0, totalTimeMinutes: 0, completionRate: 0 });
+  
   const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [registering, setRegistering] = useState<boolean>(false); // Loading do botão
   const [error, setError] = useState<string | null>(null);
   const [selectedPractice, setSelectedPractice] = useState<MindfulnessPractice | null>(null);
   const [showDetails, setShowDetails] = useState<boolean>(false);
 
+  const fetchData = async () => {
+    setError(null);
+    try {
+      const [practicesData, historyData] = await Promise.all([
+        listPractices(),
+        getMyMindfulnessHistory()
+      ]);
+
+      setPractices(practicesData);
+      const calculatedStats = calculateMindfulnessStats(historyData);
+      setStats(calculatedStats);
+
+    } catch (e: any) {
+      console.error(e);
+      setError('Não foi possível carregar os dados de mindfulness.');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const data = await listPractices();
-        if (mounted) setPractices(data);
-      } catch (e: any) {
-        if (mounted) setError('Não foi possível carregar as práticas.');
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
+    fetchData();
   }, []);
 
-  // --- Cabeçalho da Lista (Dashboard) ---
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
+
+  // --- FUNÇÃO DE CONCLUIR SESSÃO ---
+  const handleCompleteSession = async () => {
+    if (!selectedPractice) return;
+    
+    setRegistering(true);
+    try {
+      await registerMindfulnessSession({
+        mindfulnessId: selectedPractice.id,
+        dataRealizada: new Date().toISOString(),
+        duracaoReal: selectedPractice.duracao,
+        feedback: 'Sessão concluída via app',
+        pontuacao: 100
+      });
+
+      setShowDetails(false);
+      setSelectedPractice(null);
+      await fetchData(); // Atualiza o streak/stats
+
+      Alert.alert("Sucesso!", "Prática registrada. Continue assim!");
+
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Erro", "Não foi possível registrar a sessão.");
+    } finally {
+      setRegistering(false);
+    }
+  };
+
+  const formatTime = (minutes: number) => {
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h`;
+  };
+
   const renderHeader = () => (
     <View>
-      {/* Top Header */}
       <View style={styles.headerContainer}>
         <View style={styles.headerTopRow}>
           <View style={styles.logoRow}>
-            {/* Placeholder para Logo */}
-            <View style={{width: 40, height: 40, borderRadius: 20, backgroundColor: '#eee', alignItems: 'center', justifyContent: 'center'}}>
-                 <Flame size={24} color="#D55C15" />
+            <View style={{width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff7ed', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#ffedd5'}}>
+                 <Flame size={20} color="#D55C15" fill="#D55C15" />
             </View>
-            <Text style={styles.pageTitle}>Sessões de Mindfulness</Text>
+            <Text style={styles.pageTitle}>Sessões</Text>
           </View>
-          <TouchableOpacity style={styles.newSessionButton}>
-            <Text style={styles.newSessionText}>Nova Sessão</Text>
-          </TouchableOpacity>
         </View>
-        <Text style={styles.pageSubtitle}>Práticas guiadas para bem-estar mental da equipe</Text>
+        <Text style={styles.pageSubtitle}>Práticas guiadas para bem-estar mental</Text>
       </View>
 
-      {/* Seção de Streak */}
       <View style={styles.streakContainer}>
         <View style={styles.streakCard}>
           <View style={styles.streakBg} />
           <View style={styles.streakIconContainer}>
-            <Flame size={64} color="#f97316" fill="#f97316" />
+            <Flame size={64} color={stats.streak > 0 ? "#f97316" : "#9ca3af"} fill={stats.streak > 0 ? "#f97316" : "none"} />
           </View>
-          <Text style={styles.streakCount}>5</Text>
+          <Text style={styles.streakCount}>{stats.streak}</Text>
           <Text style={styles.streakLabel}>dias consecutivos</Text>
-          <View style={styles.streakBadge}>
-            <Text style={styles.streakBadgeText}>🔥 Aquecendo</Text>
-          </View>
-          <Text style={styles.streakFooterText}>2 dias para "Em Chamas"</Text>
+          
+          {stats.streak > 0 ? (
+             <View style={styles.streakBadge}>
+               <Text style={styles.streakBadgeText}>🔥 Em Chamas</Text>
+             </View>
+          ) : (
+            <View style={[styles.streakBadge, { backgroundColor: '#f3f4f6' }]}>
+               <Text style={[styles.streakBadgeText, { color: '#6b7280' }]}>❄️ Comece hoje!</Text>
+             </View>
+          )}
+          
+          <Text style={styles.streakFooterText}>Mantenha a constância!</Text>
         </View>
 
         <View style={styles.streakActionsRow}>
-          <TouchableOpacity style={[styles.actionButton, styles.completeButton]}>
-            <Zap size={16} color="#fff" />
-            <Text style={styles.completeButtonText}>Completei Sessão!</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionButton, styles.resetButton]}>
-             <Text style={styles.resetButtonText}>Reset</Text>
+          <TouchableOpacity style={[styles.actionButton, styles.resetButton]} onPress={onRefresh}>
+             <Text style={styles.resetButtonText}>Atualizar</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Seção de Milestones */}
       <View style={styles.milestonesCard}>
         <View style={styles.sectionTitleRow}>
           <Trophy size={18} color="#eab308" />
           <Text style={styles.sectionTitle}>Próximos Marcos</Text>
         </View>
         <View style={styles.milestonesGrid}>
-          <MilestoneItem day="3" complete icon={Star} />
-          <MilestoneItem day="7" active icon={Target} />
-          <MilestoneItem day="14" icon={Target} />
-          <MilestoneItem day="21" icon={Target} />
-          <MilestoneItem day="30" icon={Target} />
+          <MilestoneItem day="3" currentStreak={stats.streak} />
+          <MilestoneItem day="7" currentStreak={stats.streak} />
+          <MilestoneItem day="14" currentStreak={stats.streak} />
+          <MilestoneItem day="21" currentStreak={stats.streak} />
+          <MilestoneItem day="30" currentStreak={stats.streak} />
         </View>
       </View>
     </View>
   );
 
-  // --- Rodapé da Lista (Estatísticas) ---
   const renderFooter = () => (
     <View style={styles.statsContainer}>
       <View style={styles.statsHeader}>
@@ -151,45 +212,37 @@ const MindfulnessScreen: React.FC = () => {
       </View>
       <View style={styles.statsGrid}>
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: '#ea580c' }]}>156</Text>
-          <Text style={styles.statLabel}>Sessões Completadas</Text>
+          <Text style={[styles.statValue, { color: '#ea580c' }]}>{stats.totalSessions}</Text>
+          <Text style={styles.statLabel}>Sessões Completas</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: '#16a34a' }]}>89%</Text>
+          <Text style={[styles.statValue, { color: '#16a34a' }]}>{stats.completionRate}%</Text>
           <Text style={styles.statLabel}>Taxa de Conclusão</Text>
         </View>
         <View style={styles.statItem}>
-          <Text style={[styles.statValue, { color: '#2563eb' }]}>42h</Text>
+          <Text style={[styles.statValue, { color: '#2563eb' }]}>{formatTime(stats.totalTimeMinutes)}</Text>
           <Text style={styles.statLabel}>Tempo Total</Text>
         </View>
       </View>
     </View>
   );
 
-  // --- Renderização do Card Individual ---
   const renderItem = ({ item }: { item: MindfulnessPractice }) => {
     const description = item.descricao && item.descricao.trim().length > 0 ? item.descricao : 'Sem descrição';
-    // Fallback para imagem
     const imageSource = item.imageUrl ? { uri: item.imageUrl } : FALLBACK_IMAGES[item.id % FALLBACK_IMAGES.length];
 
-    // Cores baseadas no nível
-    let badgeBg = '#dcfce7'; // green-100
-    let badgeText = '#166534'; // green-800
+    let badgeBg = '#dcfce7'; 
+    let badgeText = '#166534'; 
     if (item.nivel === 'intermediario') {
-      badgeBg = '#fef9c3'; // yellow-100
-      badgeText = '#854d0e'; // yellow-800
+      badgeBg = '#fef9c3'; 
+      badgeText = '#854d0e'; 
     } else if (item.nivel === 'avancado') {
-      badgeBg = '#fee2e2'; // red-100
-      badgeText = '#991b1b'; // red-800
+      badgeBg = '#fee2e2'; 
+      badgeText = '#991b1b'; 
     }
-
-    // Dados mockados para visual igual ao Figma (já que a interface original pode não ter)
-    const duration = "10min"; 
-    const participants = Math.floor(Math.random() * 20) + 5;
 
     return (
       <View style={styles.practiceCard}>
-        {/* Imagem e Badges */}
         <View style={styles.cardImageContainer}>
           <Image source={imageSource} style={styles.cardImage} resizeMode="cover" />
           <View style={styles.cardOverlay} />
@@ -212,13 +265,12 @@ const MindfulnessScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Conteúdo do Card */}
         <View style={styles.cardContent}>
           <View style={styles.cardHeaderRow}>
             <Text style={styles.cardTitle}>{item.titulo}</Text>
             <View style={styles.durationRow}>
               <Zap size={14} color="#64748b" />
-              <Text style={styles.durationText}>{duration}</Text>
+              <Text style={styles.durationText}>{item.duracao}min</Text>
             </View>
           </View>
           
@@ -227,7 +279,7 @@ const MindfulnessScreen: React.FC = () => {
           <View style={styles.cardFooter}>
             <View style={styles.participantsRow}>
               <Users size={14} color="#64748b" />
-              <Text style={styles.footerText}>{participants} participantes</Text>
+              <Text style={styles.footerText}>{item.participants || 0} participantes</Text>
             </View>
             <TouchableOpacity 
               style={styles.detailsButton}
@@ -256,11 +308,7 @@ const MindfulnessScreen: React.FC = () => {
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity 
           style={[styles.newSessionButton, { backgroundColor: '#ef4444' }]} 
-          onPress={() => {
-            setError(null);
-            setLoading(true);
-            // Lógica de retry...
-          }}
+          onPress={fetchData}
         >
           <Text style={styles.newSessionText}>Tentar Novamente</Text>
         </TouchableOpacity>
@@ -278,17 +326,27 @@ const MindfulnessScreen: React.FC = () => {
         ListFooterComponent={renderFooter}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#D55C15']} />
+        }
         ListEmptyComponent={(
           <View style={styles.centered}>
-            <Text style={{color: '#9ca3af'}}>Nenhuma prática encontrada.</Text>
+            <Text style={{color: '#9ca3af'}}>Nenhuma prática disponível no momento.</Text>
           </View>
         )}
       />
 
-      {/* Modal de Detalhes Simplificado */}
       <Modal visible={showDetails} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
+            
+            <TouchableOpacity 
+                style={styles.modalCloseIcon} 
+                onPress={() => { setShowDetails(false); setSelectedPractice(null); }}
+            >
+                <X size={24} color="#6b7280" />
+            </TouchableOpacity>
+
             <ScrollView contentContainerStyle={styles.modalScroll}>
               {selectedPractice && (
                 <>
@@ -303,14 +361,19 @@ const MindfulnessScreen: React.FC = () => {
                   </View>
 
                   <Text style={{ fontSize: 16, color: '#4b5563', lineHeight: 24 }}>
-                    {selectedPractice.descricao}
+                    {selectedPractice.descricao || "Sem descrição detalhada."}
                   </Text>
 
                   <TouchableOpacity 
-                    style={styles.modalCloseButton} 
-                    onPress={() => { setShowDetails(false); setSelectedPractice(null); }}
+                    style={styles.modalCompleteButton} 
+                    onPress={handleCompleteSession}
+                    disabled={registering}
                   >
-                    <Text style={styles.modalCloseText}>Fechar</Text>
+                    {registering ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                        <Text style={styles.modalCompleteButtonText}>Concluir Prática</Text>
+                    )}
                   </TouchableOpacity>
                 </>
               )}
