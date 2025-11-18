@@ -1,6 +1,14 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
-import styles from './styles';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  View, 
+  Text, 
+  ScrollView, 
+  TouchableOpacity, 
+  Dimensions,
+  ActivityIndicator, // Para o loading
+  Alert // Para erros de exportação
+} from 'react-native';
+import styles from './styles'; // Seu arquivo de estilos
 import { Icon } from '../../components/ui/Icon';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -8,59 +16,46 @@ import { Badge } from '../../components/ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/Tabs';
 import { LineChart, BarChart, PieChart } from 'react-native-gifted-charts';
 
+
+// Importa as funções e interfaces do seu serviço
+import { 
+  AnalyticsData, 
+  getAnalyticsData,
+  AnalyticsTrendData,
+  getAnalyticsTrendsData,
+  AnalyticsSessionData,
+  getAnalyticsSessionsData,
+  AnalyticsPlayerData,
+  getAnalyticsPlayersData,
+  AnalyticsMoodData,
+  AnalyticsPieChartData,
+  getAnalyticsMoodData
+} from '../../services/relation'; 
+
 const screenWidth = Dimensions.get('window').width;
 
-const wellnessData = [
-  { date: '1/12', wellbeing: 78, stress: 32, energy: 85, focus: 72 },
-  { date: '2/12', wellbeing: 82, stress: 28, energy: 88, focus: 79 },
-  { date: '3/12', wellbeing: 75, stress: 45, energy: 70, focus: 68 },
-  { date: '4/12', wellbeing: 88, stress: 22, energy: 92, focus: 85 },
-  { date: '5/12', wellbeing: 84, stress: 30, energy: 87, focus: 81 },
-  { date: '6/12', wellbeing: 79, stress: 38, energy: 83, focus: 76 },
-  { date: '7/12', wellbeing: 91, stress: 18, energy: 95, focus: 89 },
-];
+// --- COMPONENTES DE GRÁFICO (Todas as Tabs agora são dinâmicas) ---
 
-const sessionData = [
-  { category: 'Respiração', sessions: 45, completion: 89 },
-  { category: 'Meditação', sessions: 32, completion: 76 },
-  { category: 'Visualização', sessions: 28, completion: 82 },
-  { category: 'Relaxamento', sessions: 38, completion: 91 },
-];
+function LineChartTrends({ data }: { data?: AnalyticsTrendData[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <View style={[styles.chartStyle, { height: 280, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#D55C15" />
+      </View>
+    );
+  }
+  const wellbeing = data.map(d => ({ value: d.wellbeing, label: d.date }));
+  const energy = data.map(d => ({ value: d.energy, label: d.date }));
+  const focus = data.map(d => ({ value: d.sono, label: d.date }));
+  const stress = data.map(d => ({ value: d.stress, label: d.date }));
 
-const playerPerformance = [
-  { name: 'João Silva', improvement: 15, sessions: 28, streak: 7 },
-  { name: 'Maria Santos', improvement: 8, sessions: 22, streak: 12 },
-  { name: 'Pedro Lima', improvement: 22, sessions: 35, streak: 15 },
-  { name: 'Ana Costa', improvement: -3, sessions: 15, streak: 3 },
-  { name: 'Carlos Mendes', improvement: 12, sessions: 25, streak: 9 },
-];
-
-const moodDistribution = [
-  { name: 'Excelente', value: 35, color: '#10b981', legendFontColor: '#10b981', legendFontSize: 14 },
-  { name: 'Bom', value: 28, color: '#3b82f6', legendFontColor: '#3b82f6', legendFontSize: 14 },
-  { name: 'Neutro', value: 20, color: '#D55C15', legendFontColor: '#D55C15', legendFontSize: 14 },
-  { name: 'Ruim', value: 12, color: '#ef4444', legendFontColor: '#ef4444', legendFontSize: 14 },
-  { name: 'Péssimo', value: 5, color: '#374151', legendFontColor: '#374151', legendFontSize: 14 },
-];
-
-function LineChartTrends() {
-  const wellbeing = wellnessData.map(d => ({ value: d.wellbeing, label: d.date }));
-  const energy = wellnessData.map(d => ({ value: d.energy, label: d.date }));
-  const focus = wellnessData.map(d => ({ value: d.focus, label: d.date }));
-  const stress = wellnessData.map(d => ({ value: d.stress, label: d.date }));
   return (
     <View style={styles.chartStyle}>
       <LineChart
-        data={wellbeing}
-        data2={energy}
-        data3={focus}
-        data4={stress}
-        height={280}
-        curved
-        hideRules={false}
-        showVerticalLines
-        spacing={40}
-        initialSpacing={20}
+        data={wellbeing} data2={energy} data3={focus} data4={stress}
+        color1="#D55C15" color2="#10b981" color3="#3b82f6" color4="#ef4444"
+        height={280} curved hideRules={false} showVerticalLines
+        spacing={40} initialSpacing={20}
         yAxisColor={'#e5e7eb'}
         xAxisLabelTextStyle={{ color: '#6b7280' }}
         yAxisTextStyle={{ color: '#6b7280' }}
@@ -69,8 +64,15 @@ function LineChartTrends() {
   );
 }
 
-function BarChartSessions() {
-  const barData = sessionData.map(d => ({ value: d.sessions, label: d.category }));
+function BarChartSessions({ data }: { data?: AnalyticsSessionData[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <View style={[styles.chartStyle, { height: 200, justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ color: '#6b7280' }}>Nenhuma sessão encontrada.</Text>
+      </View>
+    );
+  }
+  const barData = data.map(d => ({ value: d.sessions, label: d.category }));
   return (
     <View style={styles.chartStyle}>
       <BarChart
