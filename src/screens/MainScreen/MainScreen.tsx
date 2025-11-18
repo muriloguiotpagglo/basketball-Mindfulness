@@ -18,29 +18,23 @@ import { AppLogo } from '../../components/ui/AppLogo';
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
 import MindfulnessScreen from '../Mindfulness';
-import MultiprofissionalScreen from '../Multiprofissional';
 import { SettingsPage } from './SettingsPage';
  
 import { logout } from '../../services/auth';
 import { DashBoardData, getData } from '../../services/dashboard';
 
-// 2. IMPORTAR A TUA API SERVICE E A INTERFACE
-// (Ajusta o caminho se o teu ficheiro de API tiver um nome ou local diferente)
-; // <-- AJUSTA ESTE CAMINHO
 
 const { width } = Dimensions.get('window');
 
 // ... (Componentes PlayerProfile, SleepHygiene, Multidisciplinary e menuItems permanecem iguais) ...
 const PlayerProfile = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Player Profile</Text></View>;
 const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Sleep Hygiene</Text></View>;
-const Multidisciplinary = MultiprofissionalScreen;
 const menuItems = [
     // ... (menuItems)
     { id: 'dashboard', label: 'Dashboard', iconName: 'dashboard' },
     { id: 'players', label: 'Atletas', iconName: 'players' },
     { id: 'mindfulness', label: 'Mindfulness', iconName: 'mindfulness' },
     { id: 'sleep-hygiene', label: 'Higienização do Sono', iconName: 'sleep-hygiene' },
-    { id: 'multidisciplinary', label: 'Multiprofissional', iconName: 'multidisciplinary' },
     { id: 'checkin', label: 'Check-in', iconName: 'checkin' },
     { id: 'analytics', label: 'Relatórios', iconName: 'analytics' },
     { id: 'settings', label: 'Configurações', iconName: 'settings' },
@@ -309,8 +303,6 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
             // ... (outros cases)
             case "sleep-hygiene":
                 return <SleepHygiene />;
-            case "multidisciplinary":
-                return <Multidisciplinary />;
             case "checkin":
                 return <DailyCheckIn />;
             case "analytics":
