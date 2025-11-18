@@ -216,6 +216,99 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Fundo escuro semi-transparente
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '90%',
+    maxHeight: '80%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+    paddingBottom: 12,
+    marginBottom: 12,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    flex: 1, // Permite que o título cresça
+  },
+  modalCloseButton: {
+    padding: 4,
+    borderRadius: 16,
+    backgroundColor: '#f3f4f6',
+  },
+  modalBody: {
+    // O conteúdo do modal (como a FlatList) ficará aqui
+  },
+  
+  // --- Estilos para Modal de Histórico ---
+  historyItem: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
+  },
+  historyItemDate: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111827',
+  },
+  historyItemMetrics: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginTop: 4,
+  },
+
+  // --- Estilos para Modal de Check-in ---
+  checkinDetailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+  },
+  checkinDetailLabel: {
+    fontSize: 16,
+    color: '#374151',
+    fontWeight: '500',
+  },
+  checkinDetailValue: {
+    fontSize: 16,
+    color: '#111827',
+    fontWeight: '600',
+  },
+  
+  // --- Estilos para Loading/Error no Modal ---
+  modalCentered: {
+    padding: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalErrorText: {
+    fontSize: 16,
+    color: '#ef4444',
+    textAlign: 'center',
+  },
+  modalEmptyText: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    paddingVertical: 20,
+  }
 });
 
 export default styles;

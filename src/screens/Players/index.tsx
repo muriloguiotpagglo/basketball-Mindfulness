@@ -6,7 +6,8 @@ import {
   FlatList,
   ActivityIndicator,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal // Importar o Modal
 } from 'react-native';
 import { Icon } from '../../components/ui/Icon';
 import { Button } from '../../components/ui/Button';
@@ -14,13 +15,18 @@ import { Button } from '../../components/ui/Button';
 
 import { AppLogo } from '../../components/ui/AppLogo'; // Para o logo no cabeçalho
 import styles from './style';
-import { AnalyticsPlayerListData, getAnalyticsPlayerListData } from '../../services/atletas';
+import { 
+  AnalyticsPlayerListData, 
+  getAnalyticsPlayerListData,
+  getCheckinHistoryForUser, // Importar novas funções
+  getCheckinForUserAndDay,
+  CheckInData // Importar o novo tipo
+} from '../../services/atletas';
 
 
 
 /**
  * Componente Helper: Avatar do Atleta
- * Mostra a imagem se existir, ou as iniciais
  */
 const PlayerAvatar = ({ avatar, name }: { avatar: string | null, name: string }) => {
   const getInitials = (nameStr: string) => {
@@ -76,8 +82,9 @@ const MetricItem = ({ icon, color, label, value }: {
  */
 const PlayerCard = ({ player, onCheckinPress, onHistoryPress }: {
   player: AnalyticsPlayerListData,
-  onCheckinPress: (id: number) => void,
-  onHistoryPress: (id: number) => void
+  // Mudar props para passar o objeto 'player' inteiro
+  onCheckinPress: (player: AnalyticsPlayerListData) => void,
+  onHistoryPress: (player: AnalyticsPlayerListData) => void
 }) => {
   
   // Formata a data do último check-in
@@ -141,13 +148,15 @@ const PlayerCard = ({ player, onCheckinPress, onHistoryPress }: {
           variant="outline"
           style={styles.footerButton}
           textStyle={styles.footerButtonText}
-          onPress={() => onHistoryPress(player.id)}
+          // Chamar a prop com o 'player'
+          onPress={() => onHistoryPress(player)}
         />
         <Button 
           title="Check-in"
           style={{ ...styles.footerButton, ...styles.footerButtonPrimary }}
           textStyle={styles.footerButtonTextPrimary}
-          onPress={() => onCheckinPress(player.id)}
+          // Chamar a prop com o 'player'
+          onPress={() => onCheckinPress(player)}
         />
       </View>
     </View>
@@ -155,10 +164,277 @@ const PlayerCard = ({ player, onCheckinPress, onHistoryPress }: {
 };
 
 
+// --------------------------------------------------------------------
+// --- NOVO COMPONENTE: MODAL DE HISTÓRICO ---
+// --------------------------------------------------------------------
+const HistoryModal = ({ visible, onClose, player }: {
+  visible: boolean,
+  onClose: () => void,
+  player: AnalyticsPlayerListData | null
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<CheckInData[]>([]);
+
+  useEffect(() => {
+    // Só busca se o modal estiver visível e tiver um jogador
+    if (visible && player) {
+      const fetchHistory = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const data = await getCheckinHistoryForUser(player.id);
+          setHistory(data);
+        } catch (err: any) {
+          setError(err.message || "Erro ao buscar histórico.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchHistory();
+    }
+  }, [visible, player]); // Dependências: Roda quando visible ou player mudam
+
+  // Helper para formatar data
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const renderModalContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.modalCentered}>
+          <ActivityIndicator size="large" color="#D55C15" />
+        </View>
+      );
+    }
+
+    if (error) {
+      return (
+        <View style={styles.modalCentered}>
+          <Text style={styles.modalErrorText}>{error}</Text>
+        </View>
+      );
+    }
+    
+    if (history.length === 0) {
+      return (
+        <View style={styles.modalCentered}>
+          <Text style={styles.modalEmptyText}>Nenhum check-in encontrado.</Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={history}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.historyItem}>
+            <Text style={styles.historyItemDate}>{formatDate(item.data)}</Text>
+            <Text style={styles.historyItemMetrics}>
+              Humor: {item.humorPre} | Energia: {item.energia} | Sono: {item.sono} | Stress: {item.stress} | Motivação {item.motivacao}
+            </Text>
+          </View>
+        )}
+      />
+    );
+  };
+
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Histórico de {player?.name}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.modalCloseButton}>
+              <Icon name="x" size={18} color="#374151" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modalBody}>
+            {renderModalContent()}
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+
+// --------------------------------------------------------------------
+// --- NOVO COMPONENTE: MODAL DE CHECK-IN ---
+// --------------------------------------------------------------------
+const CheckinModal = ({ visible, onClose, player }: {
+  visible: boolean,
+  onClose: () => void,
+  player: AnalyticsPlayerListData | null
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [checkin, setCheckin] = useState<CheckInData | null>(null);
+
+  useEffect(() => {
+    if (visible && player) {
+      const fetchCheckin = async () => {
+        setIsLoading(true);
+        setError(null);
+        setCheckin(null);
+        try {
+          // Pega a data de hoje no formato YYYY-MM-DD
+          const today = new Date().toISOString().split('T')[0];
+          // Busca o check-in do dia para o usuário
+          const data = await getCheckinForUserAndDay(player.id, today);
+          
+          // Pega o primeiro check-in do dia (provavelmente só haverá 1)
+          if (data.length > 0) {
+            setCheckin(data[0]);
+          } else {
+            setCheckin(null); // Nenhum check-in hoje
+          }
+        } catch (err: any) {
+          setError(err.message || "Erro ao buscar check-in do dia.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchCheckin();
+    }
+  }, [visible, player]);
+
+  const renderModalContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.modalCentered}>
+          <ActivityIndicator size="large" color="#D55C15" />
+        </View>
+      );
+    }
+
+    if (error) {
+      return (
+        <View style={styles.modalCentered}>
+          <Text style={styles.modalErrorText}>{error}</Text>
+        </View>
+      );
+    }
+    
+    if (!checkin) {
+      return (
+        <View style={styles.modalCentered}>
+          <Text style={styles.modalEmptyText}>Nenhum check-in realizado hoje.</Text>
+          {/* TODO: Você pode adicionar um botão aqui para *criar* um check-in */}
+        </View>
+      );
+    }
+
+    // Se encontrou, mostra os detalhes
+    return (
+      <ScrollView>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Humor (Pré)</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.humorPre}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Nível de Stress</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.stress}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Energia</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.energia}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Condicao Física</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.condicaoFisica}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Qualidade do Sono</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.sono}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Motivação</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.motivacao}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Sono</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.sono}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Satisfação Pessoal</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.satisfacaoPessoal}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Alimentação</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.alimentacao}</Text>
+        </View>
+        <View style={styles.checkinDetailRow}>
+          <Text style={styles.checkinDetailLabel}>Preocupação</Text>
+          <Text style={styles.checkinDetailValue}>{checkin.preocupacao}</Text>
+        </View>
+        {checkin.intensidadeTreino && (
+          <View style={styles.checkinDetailRow}>
+            <Text style={styles.checkinDetailLabel}>Intensidade do Treino (Pós)</Text>
+            <Text style={styles.checkinDetailValue}>{checkin.intensidadeTreino}</Text>
+          </View>
+        )}
+        {checkin.humorPos && (
+          <View style={styles.checkinDetailRow}>
+            <Text style={styles.checkinDetailLabel}>Humor (Pós)</Text>
+            <Text style={styles.checkinDetailValue}>{checkin.humorPos}</Text>
+          </View>
+        )}
+      </ScrollView>
+    );
+  };
+
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Check-in de {player?.name}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.modalCloseButton}>
+              <Icon name="x" size={18} color="#374151" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modalBody}>
+            <Text style={[styles.modalEmptyText, {paddingVertical: 0, paddingBottom: 10}]}>
+              Data: {new Date().toLocaleDateString('pt-BR')}
+            </Text>
+            {renderModalContent()}
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+
+// --------------------------------------------------------------------
+// --- COMPONENTE PRINCIPAL: PlayersScreen ---
+// --------------------------------------------------------------------
 export default function PlayersScreen() {
   const [players, setPlayers] = useState<AnalyticsPlayerListData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Adicionar estados para controlar os modais
+  const [isHistoryModalVisible, setIsHistoryModalVisible] = useState(false);
+  const [isCheckinModalVisible, setIsCheckinModalVisible] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<AnalyticsPlayerListData | null>(null);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -178,15 +454,17 @@ export default function PlayersScreen() {
     fetchData();
   }, []); // Busca apenas uma vez
 
-  // Funções de placeholder para os botões
-  const handleCheckin = (id: number) => {
-    console.log("Navegar para Check-in do atleta:", id);
-    // TODO: Navegar para a tela de Check-in, passando o ID
+  // Atualizar handlers para abrir os modais
+  const handleCheckin = (player: AnalyticsPlayerListData) => {
+    console.log("Abrir Check-in modal para:", player.name);
+    setSelectedPlayer(player);
+    setIsCheckinModalVisible(true);
   };
   
-  const handleHistory = (id: number) => {
-    console.log("Navegar para Histórico do atleta:", id);
-    // TODO: Navegar para uma nova tela de histórico
+  const handleHistory = (player: AnalyticsPlayerListData) => {
+    console.log("Abrir Histórico modal para:", player.name);
+    setSelectedPlayer(player);
+    setIsHistoryModalVisible(true);
   };
 
 
@@ -225,6 +503,7 @@ export default function PlayersScreen() {
         renderItem={({ item }) => (
           <PlayerCard 
             player={item}
+            // Passar os novos handlers
             onCheckinPress={handleCheckin}
             onHistoryPress={handleHistory}
           />
@@ -242,7 +521,25 @@ export default function PlayersScreen() {
           <Text style={styles.mainTitle}>Perfis dos Atletas</Text>
         </View>
       </View>
+      
       {renderContent()}
+
+      {/* Adicionar os Modais à tela */}
+      {/* Eles só serão renderizados se um jogador for selecionado */}
+      {selectedPlayer && (
+        <>
+          <HistoryModal
+            visible={isHistoryModalVisible}
+            onClose={() => setIsHistoryModalVisible(false)}
+            player={selectedPlayer}
+          />
+          <CheckinModal
+            visible={isCheckinModalVisible}
+            onClose={() => setIsCheckinModalVisible(false)}
+            player={selectedPlayer}
+          />
+        </>
+      )}
     </View>
   );
 }
