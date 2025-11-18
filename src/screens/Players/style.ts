@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#fee2e2', // orange-100 (corrigido)
+    backgroundColor: '#fee2e2', 
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   avatarFallbackText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#D55C15', // orange-600
+    color: '#D55C15', 
   },
   avatarImage: {
     width: 64,
@@ -216,6 +216,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+
+  // --- NOVOS ESTILOS PARA OS MODAIS ---
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.6)', // Fundo escuro semi-transparente
@@ -247,15 +249,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1f2937',
-    flex: 1, // Permite que o título cresça
+    flex: 1, 
   },
   modalCloseButton: {
     padding: 4,
     borderRadius: 16,
     backgroundColor: '#f3f4f6',
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCloseButtonText: {
+    fontSize: 18,
+    color: '#374151',
+    fontWeight: 'bold',
+    lineHeight: 20,
   },
   modalBody: {
-    // O conteúdo do modal (como a FlatList) ficará aqui
+    // O conteúdo do modal ficará aqui
   },
   
   // --- Estilos para Modal de Histórico ---
@@ -280,6 +292,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 8,
+    alignItems: 'center',
+  },
+  checkinDetailLabelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkinDetailIcon: {
+    marginRight: 8,
+    color: '#6b7280', // Cor padrão para os ícones (cinza)
   },
   checkinDetailLabel: {
     fontSize: 16,
