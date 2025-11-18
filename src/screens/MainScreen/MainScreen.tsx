@@ -1,5 +1,4 @@
-// 1. IMPORTAR AS FERRAMENTAS NECESSÁRIAS
-import React, { useRef, useState, useEffect } from 'react'; // Adicionamos 'useEffect'
+import React, { useRef, useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -10,42 +9,40 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    ActivityIndicator, // (Opcional) Para um loading mais bonito
+    ActivityIndicator,
 } from 'react-native';
 import { Icon } from '../../components/ui/Icon';
 import { AppLogo } from '../../components/ui/AppLogo';
 
+// Importação das Telas
 import AnalyticsReports from '../AnalyticsReport';
 import DailyCheckIn from '../DailyCheckin';
 import MindfulnessScreen from '../Mindfulness';
 import { SettingsPage } from './SettingsPage';
- 
-import { logout } from '../../services/auth';
-import { DashBoardData, getData } from '../../services/dashboard';
 import SleepHygieneScreen from '../HigiSono';
 import PlayersScreen from '../Players';
+import MiniGamesScreen from '../MindFulnessGames'; // Certifique-se que este caminho está correto
 
+import { logout } from '../../services/auth';
+import { DashBoardData, getData } from '../../services/dashboard';
 
 const { width } = Dimensions.get('window');
 
-// ... (Componentes PlayerProfile, SleepHygiene, Multidisciplinary e menuItems permanecem iguais) ...
-const PlayerProfile = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Player Profile</Text></View>;
-const SleepHygiene = () => <View style={styles.placeholderContainer}><Text style={styles.placeholderText}>Sleep Hygiene</Text></View>;
+// --- MENU LATERAL ---
 const menuItems = [
-    // ... (menuItems)
     { id: 'dashboard', label: 'Dashboard', iconName: 'dashboard' },
     { id: 'players', label: 'Atletas', iconName: 'players' },
     { id: 'mindfulness', label: 'Mindfulness', iconName: 'mindfulness' },
     { id: 'sleep-hygiene', label: 'Higienização do Sono', iconName: 'sleep-hygiene' },
     { id: 'checkin', label: 'Check-in', iconName: 'checkin' },
+    { id: 'minigames', label: 'MiniGames', iconName: 'gamepad-2' }, // 'gamepad-2' é um ícone comum para jogos (ajuste se necessário)
     { id: 'analytics', label: 'Relatórios', iconName: 'analytics' },
     { id: 'settings', label: 'Configurações', iconName: 'settings' },
 ];
 
+// --- COMPONENTES AUXILIARES (Header, Menu, etc) ---
 
-// ... (Componentes Navigation e SideMenu permanecem iguais) ...
 const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHeader }: any) => (
-    // ... (código do Navigation)
     <View style={[styles.headerContainer, isMenuOpen && styles.headerNoBorder]} onLayout={onLayoutHeader}>
         <TouchableOpacity onPress={onToggleMenu} style={styles.headerLeft} hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}>
             <View style={{ width: 24, height: 24 }}>
@@ -73,7 +70,6 @@ const Navigation = ({ onToggleMenu, avatarText, isMenuOpen, menuAnim, onLayoutHe
 );
 
 const SideMenu = ({ activeTab, onTabChange, onClose, onLogout, topOffset }: { activeTab: string, onTabChange: (tab: string) => void, onClose: () => void, onLogout: () => void, topOffset: number }) => (
-    // ... (código do SideMenu)
     <View style={[styles.modalOverlay, { top: topOffset }]}>
         <View style={styles.sideMenuContainer}>
             <ScrollView style={styles.sideMenuScroll}>
@@ -107,16 +103,13 @@ const SideMenu = ({ activeTab, onTabChange, onClose, onLogout, topOffset }: { ac
     </View>
 );
 
-
-// 3. REFATORAR O TEAMDASHBOARD PARA ACEITAR PROPS
+// --- COMPONENTE DASHBOARD ---
 const TeamDashboard = ({ data, loading, error, onRetry }: { 
     data: DashBoardData | null; 
     loading: boolean; 
     error: string | null;
-    onRetry: () => void; // Função para tentar buscar dados novamente
+    onRetry: () => void; 
 }) => {
-
-    // 3.1. LIDAR COM O ESTADO DE CARREGAMENTO (LOADING)
     if (loading) {
         return (
             <View style={styles.placeholderContainer}>
@@ -126,7 +119,6 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
         );
     }
 
-    // 3.2. LIDAR COM O ESTADO DE ERRO
     if (error) {
         return (
             <View style={styles.placeholderContainer}>
@@ -138,7 +130,6 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
         );
     }
 
-    // 3.3. LIDAR COM SUCESSO, MAS SEM DADOS
     if (!data) {
         return (
             <View style={styles.placeholderContainer}>
@@ -147,31 +138,28 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
         );
     }
 
-    // 3.4. (Opcional) Formatar o texto de comparação
     const comparacaoTexto = data.comparacaoMesPassado >= 0 
         ? `+${data.comparacaoMesPassado}` 
         : `${data.comparacaoMesPassado}`;
     
     const comparacaoCor = data.comparacaoMesPassado >= 0 
-        ? '#10b981' // Verde (positivo)
-        : '#ef4444'; // Vermelho (negativo)
+        ? '#10b981'
+        : '#ef4444';
 
-    // 3.5. RENDERIZAR OS DADOS DINÂMICOS
     return (
         <ScrollView contentContainerStyle={styles.dashboardScrollContent} style={styles.dashboardContainer}>
-
             <View style={styles.mainCard}>
                 <View>
                     <Text style={styles.mainCardTitle}>Dashboard da Equipe</Text>
                     <Text style={styles.mainCardSubtitle}>Monitoramento de bem-estar e mindfulness</Text>
                 </View>
                 <Image
-                    source={{ uri: 'https://placehold.co/60x60/ffffff/000?text=TEAM' }} // TODO: Mudar para o logo do time
+                    source={{ uri: 'https://placehold.co/60x60/ffffff/000?text=TEAM' }}
                     style={styles.teamLogo}
                 />
             </View>
 
-            {/* Total de Atletas */}
+            {/* Cards de Métricas */}
             <View style={styles.metricCard}>
                 <Text style={styles.metricLabel}>Total de Atletas</Text>
                 <Text style={styles.metricValue}>{data.totalAtletas}</Text>
@@ -180,7 +168,6 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
                 </Text>
             </View>
             
-            {/* Bem-estar Médio */}
             <View style={styles.metricCard}>
                 <Text style={styles.metricLabel}>Bem-estar Médio</Text>
                 <Text style={styles.metricValue}>{data.bemEstarMedio}%</Text>
@@ -189,14 +176,12 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
                 </View>
             </View>
             
-            {/* Sessões Hoje */}
             <View style={styles.metricCard}>
                 <Text style={styles.metricLabel}>Sessões Hoje</Text>
                 <Text style={styles.metricValue}>{data.sessoesHoje}</Text>
                 <Text style={styles.metricHint}>{data.porcentagemSessoes}% dos atletas ativos</Text>
             </View>
             
-            {/* Nível de Stress */}
             <View style={styles.metricCard}>
                 <Text style={styles.metricLabel}>Nível de Stress</Text>
                 <Text style={styles.metricValue}>{data.stressMedio}%</Text>
@@ -208,7 +193,6 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
                 </View>
             </View>
 
-            {/* Atividades Recentes */}
             <View style={styles.activitiesCard}>
                 <Text style={styles.activitiesTitle}>Atividades Recentes</Text>
                 {data.atividadesRecentes.length > 0 ? (
@@ -222,35 +206,28 @@ const TeamDashboard = ({ data, loading, error, onRetry }: {
                     <Text style={styles.activityName}>Nenhuma atividade recente.</Text>
                 )}
             </View>
-
             <View style={{ height: 50 }} />
         </ScrollView>
     );
 };
 
-
+// --- TELA PRINCIPAL (CONTAINER) ---
 export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState("dashboard");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [headerHeight, setHeaderHeight] = useState(0);
     const menuAnim = useRef(new Animated.Value(0)).current;
 
-    // 4. ADICIONAR ESTADO PARA OS DADOS DO DASHBOARD
     const [dashboardData, setDashboardData] = useState<DashBoardData | null>(null);
-    const [isLoading, setIsLoading] = useState(false); // Começa falso
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // 5. FUNÇÃO PARA BUSCAR OS DADOS
     const fetchDashboardData = async () => {
-        console.log("Buscando dados do dashboard...");
         setIsLoading(true);
         setError(null);
-        setDashboardData(null); // Limpa dados antigos
+        setDashboardData(null);
         try {
-            // Chama a função da tua API
             const data = await getData(); 
-            // Se quiseres depurar, podes adicionar o console.log aqui:
-            // console.log("DADOS RECEBIDOS:", JSON.stringify(data, null, 2));
             setDashboardData(data);
         } catch (err: any) {
             console.error("Erro ao buscar dados:", err);
@@ -260,23 +237,19 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
         }
     };
 
-    // 6. USAR useEffect PARA CHAMAR A FUNÇÃO
     useEffect(() => {
-        // Busca os dados apenas se a aba 'dashboard' estiver ativa
         if (activeTab === 'dashboard') {
             fetchDashboardData();
         }
-        // Este 'effect' vai correr sempre que 'activeTab' mudar
     }, [activeTab]);
 
     const handleToggleMenu = () => {
-        // ... (código existente)
         const next = !isMenuOpen;
         setIsMenuOpen(next);
         Animated.timing(menuAnim, { toValue: next ? 1 : 0, duration: 200, easing: Easing.inOut(Easing.quad), useNativeDriver: true }).start();
     };
+
     const handleLogout = async () => {
-        // ... (código existente)
         try {
             await logout();
         } finally {
@@ -286,18 +259,21 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
         }
     };
 
+    // --- ROTEAMENTO INTERNO ---
     const renderContent = () => {
         switch (activeTab) {
             case "dashboard":
-                // 7. PASSAR OS DADOS, LOADING E ERRO PARA O COMPONENTE
                 return (
                     <TeamDashboard 
                         data={dashboardData} 
                         loading={isLoading} 
                         error={error}
-                        onRetry={fetchDashboardData} // Passa a função para o botão "Tentar Novamente"
+                        onRetry={fetchDashboardData}
                     />
                 );
+            // CORREÇÃO AQUI: O case deve corresponder ao ID no menuItems
+            case "minigames": 
+                return <MiniGamesScreen/>;
             case "players":
                 return <PlayersScreen />;
             case "mindfulness":
@@ -342,10 +318,7 @@ export const MainScreen: React.FC<{ onLogout?: () => void }> = ({ onLogout }) =>
     );
 };
 
-
-// 8. ADICIONAR ESTILOS PARA OS NOVOS ELEMENTOS (BOTÃO TENTAR NOVAMENTE)
 const styles = StyleSheet.create({
-    // ... (todos os teus estilos existentes)
     container: {
         flex: 1,
         backgroundColor: '#f8f8f8',
@@ -391,15 +364,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    navigationText: {
-        color: '#374151',
-        fontSize: 24,
-        marginRight: 8,
-    },
-    headerLogo: {
-        width: 24,
-        height: 24,
-    },
     appTitle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -420,7 +384,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
-
     modalOverlay: {
         position: 'absolute',
         zIndex: 1000,
@@ -442,7 +405,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 16,
     },
-
     menuItem: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -455,12 +417,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#f3f4f6',
         borderRadius: 8,
         marginHorizontal: 8,
-    },
-    menuIconLight: {
-        fontSize: 20,
-        color: '#6b7280',
-        width: 30,
-        textAlign: 'center',
     },
     menuLabelLight: {
         fontSize: 16,
@@ -490,7 +446,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontWeight: '600',
     },
-
     dashboardContainer: {
         flex: 1,
         paddingHorizontal: 16,
@@ -546,7 +501,7 @@ const styles = StyleSheet.create({
     },
     metricHint: {
         fontSize: 12,
-        color: '#10b981', // Cor padrão (verde)
+        color: '#10b981', 
     },
     progressBar: {
         height: 6,
@@ -597,22 +552,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 50,
-        paddingHorizontal: 20, // Adicionado para centralizar texto de erro
+        paddingHorizontal: 20,
     },
     placeholderText: {
         fontSize: 20,
         color: '#6b7280',
-        textAlign: 'center', // Adicionado
+        textAlign: 'center',
         marginBottom: 10,
     },
-    // NOVO ESTILO
     retryButton: {
         backgroundColor: '#D55C15',
         paddingHorizontal: 24,
         paddingVertical: 12,
         borderRadius: 8,
     },
-    // NOVO ESTILO
     retryButtonText: {
         color: '#fff',
         fontSize: 16,
