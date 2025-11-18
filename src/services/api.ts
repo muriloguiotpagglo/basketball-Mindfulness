@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const HOST_IP = '192.168.15.8'
 
 export const BASE_URL =
-  Platform.OS === 'android' ? `http://${HOST_IP}:3001` : 'http://localhost:3001';
+  Platform.OS === 'android' ? `http://${HOST_IP}:3001` : 'https://minddunk.onrender.com';
 
 export const api = axios.create({
   baseURL: BASE_URL,
